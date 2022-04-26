@@ -1,5 +1,5 @@
 ### DEPENDENCIES
-FROM node:14-alpine AS dependencies
+FROM node:17-alpine AS dependencies
 RUN apk add --no-cache libc6-compat
 
 WORKDIR /tmp
