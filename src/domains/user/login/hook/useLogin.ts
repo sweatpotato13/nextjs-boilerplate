@@ -5,10 +5,7 @@ import { useRouter } from "next/router";
 import LoginService from "../service/Login.service";
 import crypto from "crypto";
 
-export default function useLogin(
-    accountName: string,
-    password: string
-): void {
+export default function useLogin(accountName: string, password: string): void {
     const setUser = useSetRecoilState(userAtom);
     const router = useRouter();
 
@@ -20,8 +17,14 @@ export default function useLogin(
     useEffect(() => {
         (async () => {
             if (!accountName || !password) return;
-            const passwordHash = crypto.createHash("sha256").update(password).digest("hex");
-            const response = await LoginService.login(accountName, passwordHash);
+            const passwordHash = crypto
+                .createHash("sha256")
+                .update(password)
+                .digest("hex");
+            const response = await LoginService.login(
+                accountName,
+                passwordHash
+            );
 
             setUser(prev => ({
                 ...prev,

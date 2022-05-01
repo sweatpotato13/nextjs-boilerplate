@@ -4,21 +4,21 @@ import { IUserAtom } from "./user-atom.interface";
 
 const localStorageEffect =
     (): AtomEffect<IUserAtom> =>
-        ({ setSelf, onSet }) => {
-            const savedValue = UserLocalStorageService.getUser();
+    ({ setSelf, onSet }) => {
+        const savedValue = UserLocalStorageService.getUser();
 
-            if (savedValue !== null) {
-                setSelf(savedValue);
+        if (savedValue !== null) {
+            setSelf(savedValue);
+        }
+
+        onSet(newValue => {
+            if (Object.keys(newValue).length === 0) {
+                UserLocalStorageService.removeItem();
+            } else {
+                UserLocalStorageService.setItem(newValue);
             }
-
-            onSet(newValue => {
-                if (Object.keys(newValue).length === 0) {
-                    UserLocalStorageService.removeItem();
-                } else {
-                    UserLocalStorageService.setItem(newValue);
-                }
-            });
-        };
+        });
+    };
 
 const userAtom = atom<IUserAtom>({
     key: "user",

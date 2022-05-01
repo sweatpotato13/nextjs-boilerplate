@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
+/* eslint-disable @typescript-eslint/no-namespace */
 import { UseFormRegister } from "react-hook-form";
 
 export namespace ILogin {
