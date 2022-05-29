@@ -1,16 +1,13 @@
-import { css } from "@emotion/react";
 import type { NextPage } from "next";
+import { RecoilRoot } from "recoil";
+import Login from "../domains/user/login/Login.impl";
 
 const Home: NextPage = () => {
-    return <div css={containerStyle}>Hello</div>;
+    return (
+        <RecoilRoot>
+            <Login />
+        </RecoilRoot>
+    );
 };
-
-const containerStyle = css`
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
 
 export default Home;
