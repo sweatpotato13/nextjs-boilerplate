@@ -24,7 +24,7 @@ jest.mock("next/link", () => ({ children }: { children: ReactNode }) => (
     <a>{children}</a>
 ));
 
-const AllTheProviders: FC = ({ children }) => {
+const AllTheProviders: FC = () => {
     const [queryClient] = useState(
         () =>
             new QueryClient({
@@ -33,7 +33,7 @@ const AllTheProviders: FC = ({ children }) => {
     );
     return (
         <QueryClientProvider client={queryClient}>
-            <RecoilRoot>{children}</RecoilRoot>
+            <RecoilRoot>{}</RecoilRoot>
         </QueryClientProvider>
     );
 };
