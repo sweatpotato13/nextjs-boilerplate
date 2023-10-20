@@ -2,9 +2,9 @@ import VLogin from "./Login.view";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
 import useLogin from "./hook/useLogin";
-import { ILogin } from "./Login.interface.tsx";
+import { ILogin } from "./Login.interface";
 
-const Login: React.FC<ILogin.IProps> = () => {
+function Login() {
     const [accountName, setAccountName] = useState("");
     const [password, setPassword] = useState("");
 
@@ -24,6 +24,6 @@ const Login: React.FC<ILogin.IProps> = () => {
     };
 
     return <VLogin register={register} onLogin={handleSubmit(login)} />;
-};
+}
 
 export default Login;

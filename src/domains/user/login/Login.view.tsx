@@ -9,11 +9,11 @@ import {
     ThemeProvider,
     Typography,
 } from "@mui/material";
-import { ILogin } from "./Login.interface.tsx";
+import { ILogin } from "./Login.interface";
 
 const theme = createTheme();
 
-const VLogin: React.FC<ILogin.IVProps> = props => {
+function VLogin(props: ILogin.IVProps) {
     const { onLogin, register } = props;
 
     return (
@@ -82,6 +82,6 @@ const VLogin: React.FC<ILogin.IVProps> = props => {
             </Container>
         </ThemeProvider>
     );
-};
+}
 
 export default VLogin;
