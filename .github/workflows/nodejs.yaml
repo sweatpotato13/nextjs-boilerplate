@@ -8,33 +8,33 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [20.x, 22.x]
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm install -g yarn
-    - name: yarn build
+    - run: npm install -g pnpm
+    - name: pnpm build
       working-directory: .
       run: |
-        yarn
-        yarn build
+        pnpm install
+        pnpm build
   lint:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [20.x, 22.x]
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm install -g yarn
-    - name: yarn build
+    - run: npm install -g pnpm
+    - name: pnpm build
       working-directory: .
       run: |
-        yarn
-        yarn lint
+        pnpm install
+        pnpm lint
