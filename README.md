@@ -1,62 +1,3 @@
-# Next.js + Feature-Sliced Design Boilerplate
-
-This project is a boilerplate integrating Next.js App Router with Feature-Sliced Design architecture.
-
-## Feature-Sliced Design (FSD) Structure
-
-This project follows the [Feature-Sliced Design](https://feature-sliced.github.io) architecture.
-
-### Layer Structure (Top → Bottom)
-
-1. **6-app**: App settings and entry point
-2. **5-pages**: Routing pages (FSD page components)
-3. **4-widgets**: Independent UI blocks
-4. **3-features**: User actions
-5. **2-entities**: Business entities
-6. **1-shared**: Shared utilities
-
-### Dependency Rules
-
-- Lower layers cannot depend on upper layers (e.g., entities cannot depend on features)
-- Each slice cannot directly access the internal implementation of other slices, only through public APIs (exports via `index.ts`)
-
-### Next.js Integration
-
-The following structure has been adopted to integrate Next.js App Router with FSD:
-
-```
-project/
-├── app/                   # Next.js App Router (root level)
-│    ├── layout.tsx        # Layout component
-│    └── page.tsx          # Main page (imports FSD components)
-├── pages/                 # Stub folder (prevents Pages Router use)
-│    └── README.md         # Documentation
-├── src/                   # FSD structure (with prefixed layers)
-│    ├── 1-shared/         # Shared utilities
-│    ├── 2-entities/       # Business entities
-│    ├── 3-features/       # User actions
-│    ├── 4-widgets/        # UI blocks
-│    ├── 5-pages/          # FSD page components
-│    └── 6-app/            # FSD app settings
-```
-
-## Components
-
-- TypeScript
-- Next.js App Router
-- TailwindCSS
-- Feature-Sliced Design
-
-## Getting Started
-
-```bash
-# Install dependencies
-pnpm install
-
-# Run development server
-pnpm dev
-```
-
 <div id="top"></div>
 
 
@@ -134,6 +75,23 @@ To get a local copy up and running follow these simple example steps.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+## Feature-Sliced Design (FSD) Structure
+
+This project follows the [Feature-Sliced Design](https://feature-sliced.github.io) architecture.
+
+### Layer Structure (Top → Bottom)
+
+1. **6-app**: App settings and entry point
+2. **5-pages**: Routing pages (FSD page components)
+3. **4-widgets**: Independent UI blocks
+4. **3-features**: User actions
+5. **2-entities**: Business entities
+6. **1-shared**: Shared utilities
+
+### Dependency Rules
+
+- Lower layers cannot depend on upper layers (e.g., entities cannot depend on features)
+- Each slice cannot directly access the internal implementation of other slices, only through public APIs (exports via `index.ts`)
 
 <!-- CONTRIBUTING -->
 ## Contributing

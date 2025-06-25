@@ -27,22 +27,22 @@
         "./src/*"
       ],
       "@shared/*": [
-        "./src/1-shared/*"
+        "./src/shared/*"
       ],
       "@entities/*": [
-        "./src/2-entities/*"
+        "./src/entities/*"
       ],
       "@features/*": [
-        "./src/3-features/*"
+        "./src/features/*"
       ],
       "@widgets/*": [
-        "./src/4-widgets/*"
+        "./src/widgets/*"
       ],
       "@pages/*": [
-        "./src/5-pages/*"
+        "./src/pages/*"
       ],
       "@app/*": [
-        "./src/6-app/*"
+        "./src/app/*"
       ]
     }
   },
