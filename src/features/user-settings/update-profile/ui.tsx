@@ -2,6 +2,7 @@
 
 import { User } from "@entities/user";
 import { Button } from "@shared/ui";
+import Image from "next/image";
 import { FormEvent, useState } from "react";
 
 interface UpdateProfileFormProps {
@@ -70,7 +71,7 @@ export const UpdateProfileForm = ({
                         <div className="mt-2 flex justify-center">
                             <div className="avatar">
                                 <div className="w-16 h-16 rounded-full">
-                                    <img
+                                    <Image
                                         src={formData.avatarUrl}
                                         alt="Avatar preview"
                                     />

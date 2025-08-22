@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { User } from "../model";
 
 interface UserCardProps {
@@ -12,7 +14,7 @@ export const UserCard = ({ user }: UserCardProps) => {
                     {user.avatarUrl ? (
                         <div className="avatar mr-4">
                             <div className="w-16 h-16 rounded-full">
-                                <img
+                                <Image
                                     src={user.avatarUrl}
                                     alt={`${user.fullName}'s avatar`}
                                 />
