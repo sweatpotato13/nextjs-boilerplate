@@ -11,13 +11,13 @@ export const TodoList = () => {
             id: "1",
             text: "Morning exercise",
             completed: false,
-            createdAt: new Date(),
+            createdAt: new Date("2024-01-01T10:00:00Z"),
         },
         {
             id: "2",
             text: "Eat lunch",
             completed: true,
-            createdAt: new Date(),
+            createdAt: new Date("2024-01-01T12:00:00Z"),
         },
     ]);
 
