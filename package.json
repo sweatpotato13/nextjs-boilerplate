@@ -11,9 +11,9 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@tailwindcss/postcss": "^4.1.16",
-    "axios": "^1.13.1",
-    "next": "^16.0.1",
+    "@tailwindcss/postcss": "^4.1.17",
+    "axios": "^1.13.2",
+    "next": "^16.0.3",
     "postcss": "^8.5.6",
     "react": "19.2.0",
     "react-dom": "19.2.0",
@@ -21,16 +21,16 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
-    "@eslint/js": "^9.39.0",
+    "@eslint/js": "^9.39.1",
     "@types/eslint-plugin-security": "^3",
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/uuid": "^11.0.0",
     "autoprefixer": "^10",
-    "daisyui": "^5.4.2",
-    "eslint": "^9.39.0",
-    "eslint-config-next": "^16.0.1",
+    "daisyui": "^5.5.5",
+    "eslint": "^9.39.1",
+    "eslint-config-next": "^16.0.3",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.4",
     "eslint-plugin-security": "^3.0.1",
@@ -39,9 +39,9 @@
     "husky": "^9.1.7",
     "jest": "^30.2.0",
     "prettier": "3.6.2",
-    "tailwindcss": "^4.1.16",
+    "tailwindcss": "^4.1.17",
     "ts-jest": "29.4.5",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.46.2"
+    "typescript-eslint": "8.47.0"
   }
 }
