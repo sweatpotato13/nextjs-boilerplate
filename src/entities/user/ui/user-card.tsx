@@ -13,10 +13,13 @@ export const UserCard = ({ user }: UserCardProps) => {
                 <div className="flex items-center mb-4">
                     {user.avatarUrl ? (
                         <div className="avatar mr-4">
-                            <div className="w-16 h-16 rounded-full">
+                            <div className="w-16 h-16 rounded-full relative overflow-hidden">
                                 <Image
                                     src={user.avatarUrl}
                                     alt={`${user.fullName}'s avatar`}
+                                    fill
+                                    sizes="64px"
+                                    className="object-cover"
                                 />
                             </div>
                         </div>
