@@ -1,5 +1,12 @@
+"use client";
+
 import { SettingsPage } from "@pages/settings";
+import { ProtectedRoute } from "@shared/lib";
 
 export default function Settings() {
-  return <SettingsPage />;
-} 
+    return (
+        <ProtectedRoute>
+            <SettingsPage />
+        </ProtectedRoute>
+    );
+}
