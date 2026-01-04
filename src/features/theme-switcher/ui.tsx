@@ -2,31 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-type Theme =
-    | "light"
-    | "dark"
-    | "cupcake"
-    | "synthwave"
-    | "retro"
-    | "cyberpunk"
-    | "valentine"
-    | "halloween"
-    | "garden"
-    | "forest"
-    | "lofi"
-    | "pastel"
-    | "fantasy"
-    | "wireframe"
-    | "luxury"
-    | "dracula"
-    | "cmyk"
-    | "autumn"
-    | "business"
-    | "acid"
-    | "lemonade"
-    | "night"
-    | "coffee"
-    | "winter";
+type Theme = "terminal" | "light" | "dark" | "cyberpunk";
 
 interface ThemeSwitcherProps {
     initialTheme?: Theme;
@@ -34,12 +10,11 @@ interface ThemeSwitcherProps {
 }
 
 export const ThemeSwitcher = ({
-    initialTheme = "light",
+    initialTheme = "terminal",
     onThemeChange,
 }: ThemeSwitcherProps) => {
     const [theme, setTheme] = useState<Theme>(initialTheme);
 
-    // Apply theme to html element
     useEffect(() => {
         document.documentElement.setAttribute("data-theme", theme);
         localStorage.setItem("theme", theme);
@@ -52,64 +27,51 @@ export const ThemeSwitcher = ({
         }
     };
 
+    const themes: { value: Theme; label: string }[] = [
+        { value: "terminal", label: "Terminal" },
+        { value: "dark", label: "Dark" },
+        { value: "cyberpunk", label: "Cyberpunk" },
+        { value: "light", label: "Light" },
+    ];
+
     return (
-        <div className="card bg-base-100 shadow-md">
+        <div className="card bg-base-200 border border-primary/30">
             <div className="card-body">
-                <h3 className="card-title">Appearance</h3>
+                <h3 className="text-primary text-sm mb-4">
+                    <span className="text-secondary">&gt;</span> APPEARANCE:
+                </h3>
 
-                <div className="form-control">
-                    {/* Light theme */}
-                    <label className="label cursor-pointer justify-start gap-4">
-                        <input
-                            type="radio"
-                            name="theme"
-                            className="radio radio-primary"
-                            checked={theme === "light"}
-                            onChange={() => handleThemeChange("light")}
-                        />
-                        <span className="label-text">Light</span>
-                    </label>
-
-                    {/* Dark theme */}
-                    <label className="label cursor-pointer justify-start gap-4">
-                        <input
-                            type="radio"
-                            name="theme"
-                            className="radio radio-primary"
-                            checked={theme === "dark"}
-                            onChange={() => handleThemeChange("dark")}
-                        />
-                        <span className="label-text">Dark</span>
-                    </label>
-
-                    {/* Cupcake theme */}
-                    <label className="label cursor-pointer justify-start gap-4">
-                        <input
-                            type="radio"
-                            name="theme"
-                            className="radio radio-primary"
-                            checked={theme === "cupcake"}
-                            onChange={() => handleThemeChange("cupcake")}
-                        />
-                        <span className="label-text">Cupcake</span>
-                    </label>
-
-                    {/* Cyberpunk theme */}
-                    <label className="label cursor-pointer justify-start gap-4">
-                        <input
-                            type="radio"
-                            name="theme"
-                            className="radio radio-primary"
-                            checked={theme === "cyberpunk"}
-                            onChange={() => handleThemeChange("cyberpunk")}
-                        />
-                        <span className="label-text">Cyberpunk</span>
-                    </label>
+                <div className="form-control space-y-2">
+                    {themes.map(t => (
+                        <label
+                            key={t.value}
+                            className="label cursor-pointer justify-start gap-3"
+                        >
+                            <input
+                                type="radio"
+                                name="theme"
+                                className="radio radio-primary radio-sm"
+                                checked={theme === t.value}
+                                onChange={() => handleThemeChange(t.value)}
+                            />
+                            <span
+                                className={`label-text ${
+                                    theme === t.value
+                                        ? "text-primary"
+                                        : "text-primary/60"
+                                }`}
+                            >
+                                {t.label}
+                            </span>
+                        </label>
+                    ))}
                 </div>
 
-                <div className="mt-4 text-sm opacity-70">
-                    Current theme:{" "}
-                    <span className="badge badge-primary">{theme}</span>
+                <div className="mt-4 pt-3 border-t border-primary/20 text-xs text-primary/40">
+                    Current:{" "}
+                    <span className="badge badge-warning badge-sm">
+                        {theme.toUpperCase()}
+                    </span>
                 </div>
             </div>
         </div>

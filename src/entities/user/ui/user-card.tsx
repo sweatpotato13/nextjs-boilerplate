@@ -8,24 +8,23 @@ interface UserCardProps {
 
 export const UserCard = ({ user }: UserCardProps) => {
     return (
-        <div className="card bg-base-100 shadow-md mb-6">
+        <div className="card bg-base-200 border border-primary/30">
             <div className="card-body">
                 <div className="flex items-center mb-4">
                     {user.avatarUrl ? (
                         <div className="avatar mr-4">
-                            <div className="w-16 h-16 rounded-full relative overflow-hidden">
+                            <div className="w-16 rounded border-2 border-primary/50">
                                 <Image
                                     src={user.avatarUrl}
                                     alt={`${user.fullName}'s avatar`}
-                                    fill
-                                    sizes="64px"
-                                    className="object-cover"
+                                    width={64}
+                                    height={64}
                                 />
                             </div>
                         </div>
                     ) : (
                         <div className="avatar placeholder mr-4">
-                            <div className="bg-neutral-focus text-neutral-content rounded-full w-16">
+                            <div className="bg-base-300 text-primary rounded w-16 border-2 border-primary/50">
                                 <span className="text-xl">
                                     {user.fullName.charAt(0)}
                                 </span>
@@ -33,11 +32,13 @@ export const UserCard = ({ user }: UserCardProps) => {
                         </div>
                     )}
                     <div>
-                        <h2 className="text-xl font-bold">{user.fullName}</h2>
-                        <p className="text-base-content opacity-70">
+                        <h2 className="text-lg text-primary font-bold">
+                            {user.fullName}
+                        </h2>
+                        <p className="text-secondary text-sm">
                             @{user.username}
                         </p>
-                        <div className="text-xs opacity-50 mt-1">
+                        <div className="text-xs text-primary/40 mt-1">
                             Member since{" "}
                             {new Date(user.joinedAt).toLocaleDateString()}
                         </div>
@@ -45,26 +46,28 @@ export const UserCard = ({ user }: UserCardProps) => {
                 </div>
 
                 {user.bio && (
-                    <div className="mb-4">
-                        <h3 className="text-sm font-semibold text-base-content opacity-70 mb-1">
-                            Bio
+                    <div className="mb-4 border-l-2 border-primary/30 pl-3">
+                        <h3 className="text-xs text-primary/60 mb-1">
+                            <span className="text-secondary">&gt;</span> BIO:
                         </h3>
-                        <p className="text-base-content opacity-60">
-                            {user.bio}
-                        </p>
+                        <p className="text-primary/70 text-sm">{user.bio}</p>
                     </div>
                 )}
 
-                <div className="flex justify-between items-center mt-2">
-                    <div className="text-xs opacity-50">
+                <div className="flex justify-between items-center pt-3 border-t border-primary/20">
+                    <div className="text-xs text-primary/50">
                         Role:{" "}
-                        <span className="badge badge-primary">{user.role}</span>
+                        <span className="badge badge-warning badge-sm">
+                            {user.role.toUpperCase()}
+                        </span>
                     </div>
 
                     <div className="flex gap-2">
-                        <button className="btn btn-outline btn-xs">Edit</button>
-                        <button className="btn btn-ghost btn-xs">
-                            Contact
+                        <button className="btn btn-ghost btn-xs text-primary">
+                            [EDIT]
+                        </button>
+                        <button className="btn btn-ghost btn-xs text-accent">
+                            [CONTACT]
                         </button>
                     </div>
                 </div>

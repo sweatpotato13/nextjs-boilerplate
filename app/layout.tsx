@@ -4,8 +4,8 @@ import { Navbar } from '@shared/ui';
 import { ReactNode } from 'react';
 
 export const metadata = {
-    title: 'Next.js FSD Todo App',
-    description: 'Todo app built with Feature-Sliced Design',
+    title: 'TODO TERMINAL v1.0',
+    description: 'A retro terminal-style todo app',
 };
 
 export default function RootLayout({
@@ -14,8 +14,8 @@ export default function RootLayout({
     children: ReactNode;
 }) {
     return (
-        <html lang="en">
-            <body>
+        <html lang="en" data-theme="terminal">
+            <body className="font-mono min-h-screen">
                 <Navbar />
                 {children}
             </body>

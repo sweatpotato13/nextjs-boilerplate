@@ -23,14 +23,17 @@ export const ProfileSection = () => {
     };
 
     return (
-        <div className="w-full max-w-4xl mx-auto">
+        <div className="w-full">
+            {/* Header */}
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold">User Profile</h1>
+                <h1 className="text-primary text-lg">
+                    <span className="text-secondary">&gt;</span> USER_DATA:
+                </h1>
                 <button
                     onClick={() => setIsEditing(!isEditing)}
-                    className="btn btn-outline btn-sm"
+                    className="text-sm text-primary/70 hover:text-primary hover-glow transition-all duration-150"
                 >
-                    {isEditing ? "Cancel" : "Edit Profile"}
+                    [{isEditing ? "CANCEL" : "EDIT"}]
                 </button>
             </div>
 

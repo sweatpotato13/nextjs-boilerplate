@@ -1,7 +1,5 @@
 "use client";
 
-import { Button } from "@shared/ui";
-
 import { Todo } from "../model";
 
 interface TodoItemProps {
@@ -12,27 +10,45 @@ interface TodoItemProps {
 
 export const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
     return (
-        <li className="flex items-center justify-between p-4 mb-2 border rounded-lg">
-            <div className="flex items-center">
-                <input
-                    type="checkbox"
-                    checked={todo.completed}
-                    onChange={() => onToggle(todo.id)}
-                    className="w-5 h-5 mr-3"
-                />
+        <li className="group flex items-center justify-between py-2 px-3 hover:bg-primary/5 transition-colors duration-150 animate-fade-in">
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+                {/* ASCII Checkbox */}
+                <button
+                    onClick={() => onToggle(todo.id)}
+                    className={`font-mono text-sm font-bold shrink-0 cursor-pointer select-none transition-all duration-200 ${
+                        todo.completed
+                            ? "text-success"
+                            : "text-primary/60 hover:text-primary"
+                    }`}
+                    aria-label={
+                        todo.completed
+                            ? "Mark as incomplete"
+                            : "Mark as complete"
+                    }
+                >
+                    [{todo.completed ? "x" : " "}]
+                </button>
+
+                {/* Task Text */}
                 <span
-                    className={`${todo.completed ? "line-through text-gray-500" : ""}`}
+                    className={`truncate transition-all duration-200 ${
+                        todo.completed
+                            ? "line-through text-primary/40"
+                            : "text-primary"
+                    }`}
                 >
                     {todo.text}
                 </span>
             </div>
-            <Button
-                variant="error"
+
+            {/* Delete Button */}
+            <button
                 onClick={() => onDelete(todo.id)}
-                className="ml-4"
+                className="text-error/60 hover:text-error text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-150 shrink-0 ml-2"
+                aria-label="Delete task"
             >
-                Delete
-            </Button>
+                [DEL]
+            </button>
         </li>
     );
 };

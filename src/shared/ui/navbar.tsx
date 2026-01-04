@@ -10,111 +10,78 @@ export const Navbar = () => {
         return pathname === path;
     };
 
+    const navItems = [
+        { path: "/", label: "HOME" },
+        { path: "/about", label: "ABOUT" },
+        { path: "/profile", label: "PROFILE" },
+        { path: "/settings", label: "SETTINGS" },
+    ];
+
     return (
-        <div className="navbar bg-base-100 shadow-md">
+        <nav className="navbar bg-base-200 border-b border-primary/30 font-mono">
             <div className="navbar-start">
-                <div className="flex-1">
-                    <Link
-                        href="/"
-                        className="btn btn-ghost text-xl text-primary font-bold"
-                    >
-                        FSD App
-                    </Link>
-                </div>
+                <Link
+                    href="/"
+                    className="btn btn-ghost text-primary text-lg normal-case"
+                >
+                    <span className="text-secondary">&gt;</span> TERMINAL_
+                    <span className="animate-blink">|</span>
+                </Link>
             </div>
+
+            {/* Desktop Navigation */}
             <div className="navbar-center hidden lg:flex">
-                <ul className="menu menu-horizontal px-1">
-                    <li>
-                        <Link
-                            href="/"
-                            className={
-                                isActive("/")
-                                    ? "active font-medium"
-                                    : "font-medium"
-                            }
-                        >
-                            Home
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            href="/about"
-                            className={
-                                isActive("/about")
-                                    ? "active font-medium"
-                                    : "font-medium"
-                            }
-                        >
-                            About
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            href="/profile"
-                            className={
-                                isActive("/profile")
-                                    ? "active font-medium"
-                                    : "font-medium"
-                            }
-                        >
-                            Profile
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            href="/settings"
-                            className={
-                                isActive("/settings")
-                                    ? "active font-medium"
-                                    : "font-medium"
-                            }
-                        >
-                            Settings
-                        </Link>
-                    </li>
+                <ul className="menu menu-horizontal gap-1">
+                    {navItems.map(item => (
+                        <li key={item.path}>
+                            <Link
+                                href={item.path}
+                                className={`${
+                                    isActive(item.path)
+                                        ? "text-secondary"
+                                        : "text-primary/70 hover:text-primary"
+                                }`}
+                            >
+                                [{isActive(item.path) ? "*" : " "}
+                                {item.label}]
+                            </Link>
+                        </li>
+                    ))}
                 </ul>
             </div>
-            <div className="navbar-end">
-                <div className="dropdown dropdown-end lg:hidden">
+
+            {/* Mobile Menu */}
+            <div className="navbar-end lg:hidden">
+                <div className="dropdown dropdown-end">
                     <div
                         tabIndex={0}
                         role="button"
-                        className="btn btn-ghost btn-circle"
+                        className="btn btn-ghost text-primary"
                     >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M4 6h16M4 12h16M4 18h7"
-                            />
-                        </svg>
+                        [MENU]
                     </div>
                     <ul
                         tabIndex={0}
-                        className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+                        className="menu menu-sm dropdown-content mt-2 z-50 p-2 border border-primary/50 bg-base-100 w-40"
                     >
-                        <li>
-                            <Link href="/">Home</Link>
-                        </li>
-                        <li>
-                            <Link href="/about">About</Link>
-                        </li>
-                        <li>
-                            <Link href="/profile">Profile</Link>
-                        </li>
-                        <li>
-                            <Link href="/settings">Settings</Link>
-                        </li>
+                        {navItems.map(item => (
+                            <li key={item.path}>
+                                <Link
+                                    href={item.path}
+                                    className={
+                                        isActive(item.path)
+                                            ? "text-secondary"
+                                            : "text-primary"
+                                    }
+                                >
+                                    {isActive(item.path) ? ">" : " "}{" "}
+                                    {item.label}
+                                </Link>
+                            </li>
+                        ))}
                     </ul>
                 </div>
             </div>
-        </div>
+        </nav>
     );
 };

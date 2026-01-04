@@ -24,63 +24,44 @@ export const NotificationPreferences = () => {
         }));
     };
 
+    const options: { key: keyof NotificationSettings; label: string }[] = [
+        { key: "email", label: "Email Notifications" },
+        { key: "push", label: "Push Notifications" },
+        { key: "taskReminders", label: "Task Reminders" },
+        { key: "marketingEmails", label: "Marketing Emails" },
+    ];
+
     return (
-        <div className="card bg-base-100 shadow-md mt-6">
+        <div className="card bg-base-200 border border-primary/30">
             <div className="card-body">
-                <h3 className="card-title">Notification Preferences</h3>
+                <h3 className="text-primary text-sm mb-4">
+                    <span className="text-secondary">&gt;</span>{" "}
+                    NOTIFICATION_SETTINGS:
+                </h3>
 
-                <div className="form-control">
-                    <label className="label cursor-pointer">
-                        <span className="label-text">Email Notifications</span>
-                        <input
-                            type="checkbox"
-                            className="toggle toggle-primary"
-                            checked={settings.email}
-                            onChange={() => handleToggle("email")}
-                        />
-                    </label>
+                <div className="form-control space-y-3">
+                    {options.map(option => (
+                        <label
+                            key={option.key}
+                            className="label cursor-pointer justify-between"
+                        >
+                            <span className="label-text text-primary/80">
+                                {option.label}
+                            </span>
+                            <input
+                                type="checkbox"
+                                className="toggle toggle-primary toggle-sm"
+                                checked={settings[option.key]}
+                                onChange={() => handleToggle(option.key)}
+                            />
+                        </label>
+                    ))}
                 </div>
 
-                <div className="form-control">
-                    <label className="label cursor-pointer">
-                        <span className="label-text">Push Notifications</span>
-                        <input
-                            type="checkbox"
-                            className="toggle toggle-primary"
-                            checked={settings.push}
-                            onChange={() => handleToggle("push")}
-                        />
-                    </label>
-                </div>
-
-                <div className="form-control">
-                    <label className="label cursor-pointer">
-                        <span className="label-text">Task Reminders</span>
-                        <input
-                            type="checkbox"
-                            className="toggle toggle-primary"
-                            checked={settings.taskReminders}
-                            onChange={() => handleToggle("taskReminders")}
-                        />
-                    </label>
-                </div>
-
-                <div className="form-control">
-                    <label className="label cursor-pointer">
-                        <span className="label-text">Marketing Emails</span>
-                        <input
-                            type="checkbox"
-                            className="toggle toggle-primary"
-                            checked={settings.marketingEmails}
-                            onChange={() => handleToggle("marketingEmails")}
-                        />
-                    </label>
-                </div>
-
-                <div className="mt-4">
-                    <div className="badge badge-outline">
-                        Settings saved automatically
-                    </div>
+                <div className="mt-4 pt-3 border-t border-primary/20 text-xs text-primary/40">
+                    <span className="badge badge-success badge-sm">
+                        Auto-saved
+                    </span>
                 </div>
             </div>
         </div>

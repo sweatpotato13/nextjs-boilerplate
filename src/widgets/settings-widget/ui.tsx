@@ -10,25 +10,33 @@ export const SettingsWidget = () => {
     );
 
     return (
-        <div className="w-full max-w-4xl mx-auto">
-            <h1 className="text-2xl font-bold mb-6">Settings</h1>
+        <div className="w-full">
+            {/* Header */}
+            <h1 className="text-primary text-lg mb-6">
+                <span className="text-secondary">&gt;</span> CONFIG_OPTIONS:
+            </h1>
 
+            {/* Tab Navigation */}
             <div className="tabs tabs-bordered mb-6">
                 <button
                     onClick={() => setActiveTab("general")}
                     className={`tab tab-lg ${
-                        activeTab === "general" ? "tab-active" : ""
+                        activeTab === "general"
+                            ? "tab-active text-secondary"
+                            : "text-primary/60"
                     }`}
                 >
-                    General
+                    [{activeTab === "general" ? "*" : " "}GENERAL]
                 </button>
                 <button
                     onClick={() => setActiveTab("notifications")}
                     className={`tab tab-lg ${
-                        activeTab === "notifications" ? "tab-active" : ""
+                        activeTab === "notifications"
+                            ? "tab-active text-secondary"
+                            : "text-primary/60"
                     }`}
                 >
-                    Notifications
+                    [{activeTab === "notifications" ? "*" : " "}NOTIFICATIONS]
                 </button>
             </div>
 
@@ -36,10 +44,14 @@ export const SettingsWidget = () => {
                 <div className="space-y-6">
                     <ThemeSwitcher />
 
-                    <div className="card bg-base-100 shadow-md">
+                    {/* Language Section */}
+                    <div className="card bg-base-200 border border-primary/30">
                         <div className="card-body">
-                            <h3 className="card-title">Language</h3>
-                            <select className="select select-bordered w-full">
+                            <h3 className="text-primary text-sm mb-3">
+                                <span className="text-secondary">&gt;</span>{" "}
+                                LANGUAGE:
+                            </h3>
+                            <select className="select select-bordered select-primary w-full bg-transparent">
                                 <option value="en">English</option>
                                 <option value="fr">French</option>
                                 <option value="es">Spanish</option>
