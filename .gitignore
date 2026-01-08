@@ -42,3 +42,4 @@ __snapshots__
 # idea
 .idea
 node_modules
+coverage
