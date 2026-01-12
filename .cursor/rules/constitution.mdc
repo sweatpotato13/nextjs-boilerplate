@@ -25,9 +25,14 @@ All code MUST adhere to strict quality standards to maintain long-term maintaina
 
 ### II. Testing Standards
 
-Every feature MUST be adequately tested to ensure reliability and prevent regressions.
+Every feature MUST be adequately tested to ensure reliability and prevent regressions. Test-Driven Development (TDD) MUST be practiced to drive design and ensure comprehensive test coverage.
 
 **Non-Negotiable Rules:**
+- Test-Driven Development (TDD) MUST be followed for all new features:
+  - Tests MUST be written BEFORE implementation code (Red-Green-Refactor cycle)
+  - Start with failing tests (Red) that define the desired behavior
+  - Write minimal implementation code to make tests pass (Green)
+  - Refactor code while maintaining test coverage (Refactor)
 - Every new function MUST have at least one test
 - Tests MUST cover edge cases, not just happy paths
 - External dependencies MUST be mocked in unit tests
@@ -37,8 +42,9 @@ Every feature MUST be adequately tested to ensure reliability and prevent regres
   - Authentication/authorization flows
 - Test files MUST be colocated with source files or in a parallel `__tests__` directory
 - All tests MUST pass before merging to main branch
+- No code changes without corresponding tests (except for trivial refactoring)
 
-**Rationale:** Tests are the safety net for refactoring and the documentation of expected behavior.
+**Rationale:** Tests are the safety net for refactoring and the documentation of expected behavior. TDD ensures that code is designed for testability and maintainability from the start, reducing technical debt and improving code quality.
 
 ### III. User Experience Consistency
 
@@ -141,4 +147,4 @@ This constitution supersedes all conflicting practices and guidelines.
 - MINOR: New principles added or significant guidance expansion
 - PATCH: Clarifications, wording improvements, non-semantic changes
 
-**Version**: 1.0.0 | **Ratified**: 2026-01-04 | **Last Amended**: 2026-01-04
+**Version**: 1.1.0 | **Ratified**: 2026-01-04 | **Last Amended**: 2026-01-12
