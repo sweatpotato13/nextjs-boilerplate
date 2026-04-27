@@ -20,12 +20,14 @@ describe("LogoutButton", () => {
 
     it("should render logout button with correct text", () => {
         render(<LogoutButton />);
-        expect(screen.getByText("[LOGOUT]")).toBeInTheDocument();
+        expect(
+            screen.getByRole("button", { name: "Sign out" })
+        ).toBeInTheDocument();
     });
 
     it("should call logout when clicked", () => {
         render(<LogoutButton />);
-        const button = screen.getByText("[LOGOUT]");
+        const button = screen.getByRole("button", { name: "Sign out" });
 
         fireEvent.click(button);
 
@@ -36,7 +38,7 @@ describe("LogoutButton", () => {
         const router = useRouter();
         const pushMock = router.push;
         render(<LogoutButton />);
-        const button = screen.getByText("[LOGOUT]");
+        const button = screen.getByRole("button", { name: "Sign out" });
 
         fireEvent.click(button);
 
@@ -52,7 +54,7 @@ describe("LogoutButton", () => {
         );
 
         render(<LogoutButton />);
-        const button = screen.getByText("[LOGOUT]");
+        const button = screen.getByRole("button", { name: "Sign out" });
 
         fireEvent.click(button);
 

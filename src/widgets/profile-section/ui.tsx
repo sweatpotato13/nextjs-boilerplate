@@ -8,50 +8,59 @@ import {
     UserStatsCard,
 } from "@entities/user";
 import { UpdateProfileForm } from "@features/user-settings";
+import { Badge } from "@shared/ui/primitives/badge";
+import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from "@shared/ui/primitives/tabs";
 import { useState } from "react";
 
 export const ProfileSection = () => {
     const [user, setUser] = useState<User>(mockUser);
-    const [isEditing, setIsEditing] = useState(false);
 
     const handleUpdateProfile = (updatedUser: Partial<User>) => {
-        setUser(currentUser => ({
-            ...currentUser,
-            ...updatedUser,
-        }));
-        setIsEditing(false);
+        setUser(current => ({ ...current, ...updatedUser }));
     };
 
     return (
-        <div className="w-full">
-            {/* Header */}
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-primary text-lg">
-                    <span className="text-secondary">&gt;</span> USER_DATA:
-                </h1>
-                <button
-                    onClick={() => setIsEditing(!isEditing)}
-                    className="text-sm text-primary/70 hover:text-primary hover-glow transition-all duration-150"
-                >
-                    [{isEditing ? "CANCEL" : "EDIT"}]
-                </button>
+        <div className="grid gap-6">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="grid gap-1">
+                    <h1 className="text-2xl font-semibold tracking-tight">
+                        Profile
+                    </h1>
+                    <p className="text-sm text-muted-foreground">
+                        Review your identity, activity, and quick actions.
+                    </p>
+                </div>
+                <Badge variant="secondary" className="rounded-full px-3">
+                    Active member
+                </Badge>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6">
-                <div className="md:col-span-2">
-                    {isEditing ? (
-                        <UpdateProfileForm
-                            user={user}
-                            onUpdateProfile={handleUpdateProfile}
-                        />
-                    ) : (
-                        <UserCard user={user} />
-                    )}
-                </div>
-                <div className="md:col-span-1">
+            <Tabs defaultValue="overview" className="grid gap-4">
+                <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="overview">Overview</TabsTrigger>
+                    <TabsTrigger value="edit">Edit</TabsTrigger>
+                </TabsList>
+
+                <TabsContent
+                    value="overview"
+                    className="grid gap-6 lg:grid-cols-[2fr_1fr]"
+                >
+                    <UserCard user={user} />
                     <UserStatsCard stats={mockUserStats} />
-                </div>
-            </div>
+                </TabsContent>
+
+                <TabsContent value="edit">
+                    <UpdateProfileForm
+                        user={user}
+                        onUpdateProfile={handleUpdateProfile}
+                    />
+                </TabsContent>
+            </Tabs>
         </div>
     );
 };

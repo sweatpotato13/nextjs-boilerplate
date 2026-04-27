@@ -1,4 +1,17 @@
-import Image from "next/image";
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from "@shared/ui/primitives/avatar";
+import { Badge } from "@shared/ui/primitives/badge";
+import { Button } from "@shared/ui/primitives/button";
+import {
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@shared/ui/primitives/card";
 
 import { User } from "../model";
 
@@ -8,70 +21,55 @@ interface UserCardProps {
 
 export const UserCard = ({ user }: UserCardProps) => {
     return (
-        <div className="card bg-base-200 border border-primary/30">
-            <div className="card-body">
-                <div className="flex items-center mb-4">
+        <Card className="border-border/70 bg-card shadow-sm">
+            <CardHeader className="flex flex-row items-center gap-4 border-b border-border/60">
+                <Avatar className="size-16">
                     {user.avatarUrl ? (
-                        <div className="avatar mr-4">
-                            <div className="w-16 rounded border-2 border-primary/50">
-                                <Image
-                                    src={user.avatarUrl}
-                                    alt={`${user.fullName}'s avatar`}
-                                    width={64}
-                                    height={64}
-                                />
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="avatar placeholder mr-4">
-                            <div className="bg-base-300 text-primary rounded w-16 border-2 border-primary/50">
-                                <span className="text-xl">
-                                    {user.fullName.charAt(0)}
-                                </span>
-                            </div>
-                        </div>
-                    )}
-                    <div>
-                        <h2 className="text-lg text-primary font-bold">
-                            {user.fullName}
-                        </h2>
-                        <p className="text-secondary text-sm">
-                            @{user.username}
-                        </p>
-                        <div className="text-xs text-primary/40 mt-1">
-                            Member since{" "}
-                            {new Date(user.joinedAt).toLocaleDateString()}
-                        </div>
-                    </div>
+                        <AvatarImage
+                            src={user.avatarUrl}
+                            alt={`${user.fullName}'s avatar`}
+                        />
+                    ) : null}
+                    <AvatarFallback>{user.fullName.charAt(0)}</AvatarFallback>
+                </Avatar>
+
+                <div className="grid gap-1">
+                    <CardTitle className="text-lg">{user.fullName}</CardTitle>
+                    <p className="text-sm text-muted-foreground">
+                        @{user.username}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                        Member since{" "}
+                        {new Date(user.joinedAt).toLocaleDateString()}
+                    </p>
                 </div>
+            </CardHeader>
 
-                {user.bio && (
-                    <div className="mb-4 border-l-2 border-primary/30 pl-3">
-                        <h3 className="text-xs text-primary/60 mb-1">
-                            <span className="text-secondary">&gt;</span> BIO:
-                        </h3>
-                        <p className="text-primary/70 text-sm">{user.bio}</p>
-                    </div>
-                )}
+            <CardContent className="grid gap-4 pt-6">
+                {user.bio ? (
+                    <p className="rounded-2xl border border-border/60 bg-muted/30 p-4 text-sm text-muted-foreground">
+                        {user.bio}
+                    </p>
+                ) : null}
 
-                <div className="flex justify-between items-center pt-3 border-t border-primary/20">
-                    <div className="text-xs text-primary/50">
-                        Role:{" "}
-                        <span className="badge badge-warning badge-sm">
-                            {user.role.toUpperCase()}
-                        </span>
-                    </div>
-
-                    <div className="flex gap-2">
-                        <button className="btn btn-ghost btn-xs text-primary">
-                            [EDIT]
-                        </button>
-                        <button className="btn btn-ghost btn-xs text-accent">
-                            [CONTACT]
-                        </button>
-                    </div>
+                <div className="flex flex-wrap items-center gap-2">
+                    <Badge className="rounded-full" variant="secondary">
+                        {user.role}
+                    </Badge>
+                    <Badge variant="outline" className="rounded-full">
+                        Active profile
+                    </Badge>
                 </div>
-            </div>
-        </div>
+            </CardContent>
+
+            <CardFooter className="justify-end gap-2 border-t border-border/60">
+                <Button variant="ghost" size="sm">
+                    Edit profile
+                </Button>
+                <Button variant="secondary" size="sm">
+                    Contact
+                </Button>
+            </CardFooter>
+        </Card>
     );
 };

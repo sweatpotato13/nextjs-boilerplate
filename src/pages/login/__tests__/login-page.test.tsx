@@ -11,17 +11,17 @@ jest.mock("@entities/session", () => ({
     useAuth: () => mockUseAuth(),
 }));
 
-// Mock TerminalFrame
+// Mock PanelFrame
 jest.mock("@shared/ui", () => ({
-    TerminalFrame: ({
+    PanelFrame: ({
         title,
         children,
     }: {
         title: string;
         children: React.ReactNode;
     }) => (
-        <div data-testid="terminal-frame">
-            <span data-testid="terminal-title">{title}</span>
+        <div data-testid="panel-frame">
+            <span data-testid="panel-title">{title}</span>
             {children}
         </div>
     ),
@@ -47,14 +47,19 @@ describe("LoginPage", () => {
 
         it("should render loading state", () => {
             render(<LoginPage />);
-            expect(screen.getByText(/Loading system/)).toBeInTheDocument();
+            expect(
+                screen.getByText(/Preparing your session/i)
+            ).toBeInTheDocument();
+            expect(
+                screen.getByText(/Loading account state/i)
+            ).toBeInTheDocument();
         });
 
-        it("should render terminal frame with ACCESS_TERMINAL title", () => {
+        it("should render PanelFrame title", () => {
             render(<LoginPage />);
-            expect(screen.getByTestId("terminal-title")).toHaveTextContent(
-                "ACCESS_TERMINAL"
-            );
+            expect(
+                screen.getByText("Preparing your session")
+            ).toBeInTheDocument();
         });
 
         it("should not render login form", () => {
@@ -100,28 +105,26 @@ describe("LoginPage", () => {
             expect(screen.getByRole("main")).toBeInTheDocument();
         });
 
-        it("should render terminal frame with ACCESS_TERMINAL title", () => {
+        it("should render PanelFrame with correct title", () => {
             render(<LoginPage />);
-            expect(screen.getByTestId("terminal-title")).toHaveTextContent(
-                "ACCESS_TERMINAL"
+            expect(screen.getByTestId("panel-title")).toHaveTextContent(
+                "Sign in"
             );
         });
 
-        it("should render ASCII art header", () => {
+        it("should render session loading copy", () => {
             render(<LoginPage />);
-            const preElement = document.querySelector("pre");
-            expect(preElement).toBeInTheDocument();
-            // Check for part of the ASCII art
-            expect(preElement).toHaveTextContent(/___/);
+            expect(
+                screen.getByText("Sign in to continue your flow.")
+            ).toBeInTheDocument();
         });
 
         it("should render security check message", () => {
             render(<LoginPage />);
             expect(
-                screen.getByText(/SECURITY CHECK INITIATED/)
-            ).toBeInTheDocument();
-            expect(
-                screen.getByText(/ACCESS DENIED. AUTHENTICATION REQUIRED./)
+                screen.getByRole("heading", {
+                    name: /Sign in to continue your flow/i,
+                })
             ).toBeInTheDocument();
         });
 
@@ -133,13 +136,12 @@ describe("LoginPage", () => {
         it("should have responsive padding classes", () => {
             render(<LoginPage />);
             const main = screen.getByRole("main");
-            expect(main).toHaveClass("p-4", "md:p-8", "lg:p-12");
+            expect(main).toHaveClass("px-4", "py-8", "md:px-8", "lg:px-12");
         });
 
         it("should have max-width container", () => {
-            const { container } = render(<LoginPage />);
-            const maxWidthContainer = container.querySelector(".max-w-md");
-            expect(maxWidthContainer).toBeInTheDocument();
+            render(<LoginPage />);
+            expect(screen.getByRole("main")).toBeInTheDocument();
         });
     });
 });

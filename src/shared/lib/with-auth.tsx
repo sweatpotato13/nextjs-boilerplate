@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@entities/session";
-import { TerminalFrame } from "@shared/ui";
+import { PanelFrame } from "@shared/ui";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 
@@ -25,15 +25,13 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
     if (isLoading) {
         return (
-            <main className="min-h-screen p-4 md:p-8 lg:p-12">
-                <div className="max-w-md mx-auto">
-                    <TerminalFrame title="LOADING">
-                        <div className="text-primary/60 text-sm">
-                            <span className="text-secondary">&gt;</span>{" "}
-                            Verifying credentials...
-                            <span className="animate-blink">_</span>
-                        </div>
-                    </TerminalFrame>
+            <main className="min-h-screen px-4 py-8 md:px-8 lg:px-12">
+                <div className="mx-auto max-w-md">
+                    <PanelFrame title="Checking access">
+                        <p className="text-sm text-muted-foreground">
+                            Verifying your session before opening the workspace.
+                        </p>
+                    </PanelFrame>
                 </div>
             </main>
         );
@@ -41,15 +39,13 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
     if (!isAuthenticated) {
         return (
-            <main className="min-h-screen p-4 md:p-8 lg:p-12">
-                <div className="max-w-md mx-auto">
-                    <TerminalFrame title="ACCESS_DENIED">
-                        <div className="text-error text-sm">
-                            <span className="text-error">&gt;</span>{" "}
-                            Unauthorized. Redirecting to login...
-                            <span className="animate-blink">_</span>
-                        </div>
-                    </TerminalFrame>
+            <main className="min-h-screen px-4 py-8 md:px-8 lg:px-12">
+                <div className="mx-auto max-w-md">
+                    <PanelFrame title="Sign in required">
+                        <p className="text-sm text-destructive">
+                            Redirecting you to the sign-in page.
+                        </p>
+                    </PanelFrame>
                 </div>
             </main>
         );

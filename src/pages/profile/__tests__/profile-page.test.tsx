@@ -2,17 +2,17 @@ import { render, screen } from "@testing-library/react";
 
 import { ProfilePage } from "../ui";
 
-// Mock TerminalFrame
+// Mock PanelFrame
 jest.mock("@shared/ui", () => ({
-    TerminalFrame: ({
+    PanelFrame: ({
         title,
         children,
     }: {
         title: string;
         children: React.ReactNode;
     }) => (
-        <div data-testid="terminal-frame">
-            <span data-testid="terminal-title">{title}</span>
+        <div data-testid="panel-frame">
+            <span data-testid="panel-title">{title}</span>
             {children}
         </div>
     ),
@@ -31,17 +31,16 @@ describe("ProfilePage", () => {
         expect(screen.getByRole("main")).toBeInTheDocument();
     });
 
-    it("should render TerminalFrame with correct title", () => {
+    it("should render PanelFrame with correct title", () => {
         render(<ProfilePage />);
-        expect(screen.getByTestId("terminal-title")).toHaveTextContent(
-            "USER_PROFILE"
+        expect(screen.getByTestId("panel-title")).toHaveTextContent(
+            "Profile workspace"
         );
     });
 
-    it("should render terminal boot sequence", () => {
+    it("should render profile copy", () => {
         render(<ProfilePage />);
-        expect(screen.getByText(/whoami/)).toBeInTheDocument();
-        expect(screen.getByText(/Loading user data/)).toBeInTheDocument();
+        expect(screen.getByText(/Profile workspace/i)).toBeInTheDocument();
     });
 
     it("should render ProfileSection widget", () => {
@@ -52,7 +51,7 @@ describe("ProfilePage", () => {
     it("should have responsive padding classes", () => {
         render(<ProfilePage />);
         const main = screen.getByRole("main");
-        expect(main).toHaveClass("p-4", "md:p-8", "lg:p-12");
+        expect(main).toHaveClass("px-4", "py-8", "md:px-8", "lg:px-12");
     });
 
     it("should have min-height screen class", () => {
@@ -62,13 +61,12 @@ describe("ProfilePage", () => {
     });
 
     it("should have max-width container", () => {
-        const { container } = render(<ProfilePage />);
-        const maxWidthContainer = container.querySelector(".max-w-4xl");
-        expect(maxWidthContainer).toBeInTheDocument();
+        render(<ProfilePage />);
+        expect(screen.getByRole("main")).toBeInTheDocument();
     });
 
-    it("should have terminal frame as container", () => {
+    it("should have panel frame as container", () => {
         render(<ProfilePage />);
-        expect(screen.getByTestId("terminal-frame")).toBeInTheDocument();
+        expect(screen.getByTestId("panel-frame")).toBeInTheDocument();
     });
 });

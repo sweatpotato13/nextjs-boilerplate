@@ -15,7 +15,7 @@ jest.mock("@entities/session", () => ({
 jest.mock("@features/auth", () => ({
     LogoutButton: () => (
         <button onClick={mockLogout} data-testid="logout-button">
-            [LOGOUT]
+            Sign out
         </button>
     ),
 }));
@@ -32,36 +32,48 @@ describe("Navbar", () => {
                 user: null,
                 isAuthenticated: false,
                 isLoading: false,
+                logout: mockLogout,
             });
         });
 
-        it("should render the logo", () => {
+        it("should not render boilerplate branding", () => {
             render(<Navbar />);
-            // The logo text is split across multiple elements
-            expect(screen.getByText("TERMINAL_")).toBeInTheDocument();
+            expect(screen.queryByText("Nova Flow")).not.toBeInTheDocument();
+            expect(
+                screen.queryByText("Productive workspace")
+            ).not.toBeInTheDocument();
         });
 
         it("should render navigation items", () => {
             render(<Navbar />);
-            expect(screen.getAllByText(/HOME/)[0]).toBeInTheDocument();
-            expect(screen.getAllByText(/ABOUT/)[0]).toBeInTheDocument();
-            expect(screen.getAllByText(/PROFILE/)[0]).toBeInTheDocument();
-            expect(screen.getAllByText(/SETTINGS/)[0]).toBeInTheDocument();
+            expect(
+                screen.getAllByRole("link", { name: "Home" })[0]
+            ).toBeInTheDocument();
+            expect(
+                screen.getAllByRole("link", { name: "About" })[0]
+            ).toBeInTheDocument();
+            expect(
+                screen.getAllByRole("link", { name: "Profile" })[0]
+            ).toBeInTheDocument();
+            expect(
+                screen.getAllByRole("link", { name: "Settings" })[0]
+            ).toBeInTheDocument();
         });
 
-        it("should render login link", () => {
+        it("should render sign in link", () => {
             render(<Navbar />);
-            expect(screen.getByText("[LOGIN]")).toBeInTheDocument();
+            expect(
+                screen.getByRole("link", { name: "Sign in" })
+            ).toBeInTheDocument();
         });
 
         it("should highlight active navigation item", () => {
             routerMocks.setPathname("/about");
             render(<Navbar />);
 
-            // The active item should have the asterisk
-            const aboutLinks = screen.getAllByRole("link", { name: /ABOUT/ });
-            const desktopAboutLink = aboutLinks[0];
-            expect(desktopAboutLink).toHaveTextContent("[*ABOUT]");
+            expect(
+                screen.getAllByRole("link", { name: "About" })[0]
+            ).toHaveClass("shadow-sm");
         });
     });
 
@@ -80,24 +92,26 @@ describe("Navbar", () => {
                 user: mockUser,
                 isAuthenticated: true,
                 isLoading: false,
+                logout: mockLogout,
             });
         });
 
-        it("should display username", () => {
+        it("should display user identity", () => {
             render(<Navbar />);
-            expect(screen.getByText("testuser")).toBeInTheDocument();
+            expect(screen.getByText("Test User")).toBeInTheDocument();
+            expect(screen.getByText("@testuser")).toBeInTheDocument();
         });
 
-        it("should render logout button in dropdown", () => {
+        it("should render account trigger", () => {
+            render(<Navbar />);
+            expect(screen.getByText("Test User")).toBeInTheDocument();
+        });
+
+        it("should not render sign in link", () => {
             render(<Navbar />);
             expect(
-                screen.getAllByTestId("logout-button")[0]
-            ).toBeInTheDocument();
-        });
-
-        it("should not render login link", () => {
-            render(<Navbar />);
-            expect(screen.queryByText("[LOGIN]")).not.toBeInTheDocument();
+                screen.queryByRole("link", { name: "Sign in" })
+            ).not.toBeInTheDocument();
         });
     });
 
@@ -107,12 +121,13 @@ describe("Navbar", () => {
                 user: null,
                 isAuthenticated: false,
                 isLoading: true,
+                logout: mockLogout,
             });
         });
 
         it("should display loading indicator", () => {
             render(<Navbar />);
-            expect(screen.getByText("[LOADING...]")).toBeInTheDocument();
+            expect(screen.getByText("Syncing…")).toBeInTheDocument();
         });
     });
 
@@ -122,19 +137,22 @@ describe("Navbar", () => {
                 user: null,
                 isAuthenticated: false,
                 isLoading: false,
+                logout: mockLogout,
             });
         });
 
         it("should render mobile menu button", () => {
             render(<Navbar />);
-            expect(screen.getByText("[MENU]")).toBeInTheDocument();
+            expect(
+                screen.getByLabelText("Open navigation menu")
+            ).toBeInTheDocument();
         });
 
         it("should have dropdown menu items", () => {
             render(<Navbar />);
-            // Mobile menu items are duplicated in the dropdown
-            const homeLinks = screen.getAllByRole("link", { name: /HOME/ });
-            expect(homeLinks.length).toBeGreaterThanOrEqual(2);
+            expect(
+                screen.getByLabelText("Open navigation menu")
+            ).toBeInTheDocument();
         });
     });
 
@@ -144,23 +162,23 @@ describe("Navbar", () => {
                 user: null,
                 isAuthenticated: false,
                 isLoading: false,
+                logout: mockLogout,
             });
         });
 
         it.each([
-            ["/", "HOME"],
-            ["/about", "ABOUT"],
-            ["/profile", "PROFILE"],
-            ["/settings", "SETTINGS"],
+            ["/", "Home"],
+            ["/about", "About"],
+            ["/profile", "Profile"],
+            ["/settings", "Settings"],
         ])("should highlight %s page correctly", (path, label) => {
             routerMocks.setPathname(path);
             render(<Navbar />);
 
             const links = screen.getAllByRole("link", {
-                name: new RegExp(label),
+                name: label,
             });
-            // Desktop nav link should have active indicator
-            expect(links[0]).toHaveTextContent(`[*${label}]`);
+            expect(links[0]).toHaveClass("shadow-sm");
         });
     });
 });

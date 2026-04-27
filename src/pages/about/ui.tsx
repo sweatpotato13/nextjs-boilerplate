@@ -1,140 +1,104 @@
 "use client";
 
-import { TerminalFrame } from "@shared/ui";
+import { PanelFrame } from "@shared/ui";
+import { Badge } from "@shared/ui/primitives/badge";
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+} from "@shared/ui/primitives/card";
+
+const principles = [
+    "Clear structure for large applications",
+    "Promotes reusable building blocks",
+    "Keeps dependencies predictable",
+    "Supports fast onboarding",
+    "Scales across teams and features",
+];
 
 export const AboutPage = () => {
     return (
-        <main className="min-h-screen p-4 md:p-8 lg:p-12">
-            <div className="max-w-4xl mx-auto">
-                <TerminalFrame title="ABOUT.md">
-                    {/* Boot sequence */}
-                    <div className="text-primary/60 text-sm mb-6">
-                        <span className="text-secondary">&gt;</span> cat
-                        ABOUT.md
-                        <br />
-                        <span className="text-secondary">&gt;</span>{" "}
-                        <span className="text-success">
-                            Loading documentation...
-                        </span>
-                    </div>
-
-                    {/* ASCII Header */}
-                    <pre className="text-primary text-xs mb-6 leading-tight">
-                        {`
- _____ ____  ____  
-|  ___|  _ \\/ ___| 
-| |_  | |_) \\___ \\ 
-|  _| |  __/ ___) |
-|_|   |_|   |____/ 
-                        `}
-                    </pre>
-
-                    <section className="mb-8">
-                        <h2 className="text-primary text-lg mb-3">
-                            <span className="text-secondary">&gt;</span>{" "}
-                            WHAT_IS_FSD:
-                        </h2>
-                        <div className="pl-4 border-l-2 border-primary/30 text-primary/80 space-y-2">
+        <main className="min-h-screen px-4 py-8 md:px-8 lg:px-12">
+            <div className="mx-auto grid max-w-5xl gap-8">
+                <section className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+                    <Card className="border-border/70 bg-card/90 shadow-sm">
+                        <CardHeader className="space-y-4 border-b border-border/60">
+                            <Badge
+                                variant="secondary"
+                                className="w-fit rounded-full px-3"
+                            >
+                                Architecture overview
+                            </Badge>
+                            <CardTitle className="text-3xl font-semibold tracking-tight md:text-4xl">
+                                Built around Feature-Sliced Design.
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="grid gap-4 pt-6 text-sm text-muted-foreground md:text-base">
                             <p>
-                                Feature-Sliced Design (FSD) is an architectural
-                                methodology for frontend applications that helps
-                                organize code in a way that scales with the
-                                project&apos;s complexity and team size.
+                                Feature-Sliced Design keeps the app organized by
+                                responsibility, making the codebase easier to
+                                extend and review.
                             </p>
                             <p>
-                                FSD divides your application into layers,
-                                slices, and segments, making the codebase more
-                                predictable and maintainable.
+                                The updated UI leans into soft elevation,
+                                balanced spacing, and a light-first palette with
+                                subtle dark mode support.
                             </p>
-                        </div>
-                    </section>
+                        </CardContent>
+                    </Card>
 
-                    <section className="mb-8">
-                        <h2 className="text-primary text-lg mb-3">
-                            <span className="text-secondary">&gt;</span>{" "}
-                            KEY_PRINCIPLES:
-                        </h2>
-                        <ul className="space-y-2 text-primary/80">
-                            <li className="flex items-start gap-2">
-                                <span className="text-success shrink-0">
-                                    [+]
-                                </span>
-                                <span>
-                                    <span className="text-warning">
-                                        Layers:
-                                    </span>{" "}
-                                    Code is organized in layers with strict
-                                    dependency rules (shared → entities →
-                                    features → widgets → pages → app)
-                                </span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <span className="text-success shrink-0">
-                                    [+]
-                                </span>
-                                <span>
-                                    <span className="text-warning">
-                                        Slices:
-                                    </span>{" "}
-                                    Business domains are isolated into slices
-                                    (user, todo, etc.)
-                                </span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <span className="text-success shrink-0">
-                                    [+]
-                                </span>
-                                <span>
-                                    <span className="text-warning">
-                                        Segments:
-                                    </span>{" "}
-                                    Code is split by technical purpose (ui,
-                                    model, api, etc.)
-                                </span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <span className="text-success shrink-0">
-                                    [+]
-                                </span>
-                                <span>
-                                    <span className="text-warning">
-                                        Public API:
-                                    </span>{" "}
-                                    Components interact only through explicitly
-                                    exported APIs
-                                </span>
-                            </li>
-                        </ul>
-                    </section>
-
-                    <section>
-                        <h2 className="text-primary text-lg mb-3">
-                            <span className="text-secondary">&gt;</span>{" "}
-                            BENEFITS:
-                        </h2>
-                        <div className="grid md:grid-cols-2 gap-2 text-primary/80">
-                            {[
-                                "Clear structure for large applications",
-                                "Promotes code reusability",
-                                "Makes onboarding new developers easier",
-                                "Prevents dependency issues",
-                                "Facilitates parallel development",
-                            ].map((benefit, i) => (
+                    <Card className="border-border/70 bg-card/90 shadow-sm">
+                        <CardHeader className="border-b border-border/60">
+                            <CardTitle className="text-base">
+                                Principles
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="grid gap-3 pt-6">
+                            {principles.map(principle => (
                                 <div
-                                    key={i}
-                                    className="flex items-center gap-2"
+                                    key={principle}
+                                    className="rounded-2xl border border-border/60 bg-muted/30 px-4 py-3 text-sm text-muted-foreground"
                                 >
-                                    <span className="text-accent">[*]</span>
-                                    <span>{benefit}</span>
+                                    {principle}
                                 </div>
                             ))}
-                        </div>
-                    </section>
+                        </CardContent>
+                    </Card>
+                </section>
 
-                    <div className="mt-8 pt-4 border-t border-primary/20 text-xs text-primary/40">
-                        <span className="text-secondary">&gt;</span> EOF
+                <PanelFrame title="Design system">
+                    <div className="grid gap-4 md:grid-cols-3">
+                        {[
+                            [
+                                "Shadcn UI",
+                                "Composable primitives with clean tokens.",
+                            ],
+                            [
+                                "Soft gradients",
+                                "Atmosphere without visual noise.",
+                            ],
+                            [
+                                "Semantic color",
+                                "Consistent surfaces and hierarchy.",
+                            ],
+                        ].map(([title, description]) => (
+                            <Card
+                                key={title}
+                                className="border-border/70 bg-card shadow-sm"
+                            >
+                                <CardHeader className="border-b border-border/60">
+                                    <CardTitle className="text-base">
+                                        {title}
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent className="pt-6 text-sm text-muted-foreground">
+                                    {description}
+                                </CardContent>
+                            </Card>
+                        ))}
                     </div>
-                </TerminalFrame>
+                </PanelFrame>
             </div>
         </main>
     );

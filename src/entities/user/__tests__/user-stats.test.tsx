@@ -12,24 +12,24 @@ describe("UserStatsCard", () => {
 
     it("should render the header", () => {
         render(<UserStatsCard stats={mockStats} />);
-        expect(screen.getByText(/ACTIVITY_STATS:/)).toBeInTheDocument();
+        expect(screen.getByText("Activity stats")).toBeInTheDocument();
     });
 
     it("should display tasks completed count", () => {
         render(<UserStatsCard stats={mockStats} />);
-        expect(screen.getByText("Tasks Completed")).toBeInTheDocument();
+        expect(screen.getByText("Tasks completed")).toBeInTheDocument();
         expect(screen.getByText("42")).toBeInTheDocument();
     });
 
     it("should display tasks created count", () => {
         render(<UserStatsCard stats={mockStats} />);
-        expect(screen.getByText("Tasks Created")).toBeInTheDocument();
+        expect(screen.getByText("Tasks created")).toBeInTheDocument();
         expect(screen.getByText("58")).toBeInTheDocument();
     });
 
     it("should display last activity timestamp", () => {
         render(<UserStatsCard stats={mockStats} />);
-        expect(screen.getByText(/Last activity:/)).toBeInTheDocument();
+        expect(screen.getByText(/Last activity/)).toBeInTheDocument();
     });
 
     it("should render with zero stats", () => {

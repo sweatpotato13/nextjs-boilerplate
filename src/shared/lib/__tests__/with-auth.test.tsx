@@ -31,22 +31,20 @@ describe("ProtectedRoute", () => {
                 </ProtectedRoute>
             );
 
-            expect(
-                screen.getByText(/Verifying credentials/)
-            ).toBeInTheDocument();
+            expect(screen.getByText(/Checking access/)).toBeInTheDocument();
             expect(
                 screen.queryByText("Protected Content")
             ).not.toBeInTheDocument();
         });
 
-        it("should show loading terminal frame", () => {
+        it("should show loading panel", () => {
             render(
                 <ProtectedRoute>
                     <div>Protected Content</div>
                 </ProtectedRoute>
             );
 
-            expect(screen.getByText("[ LOADING ]")).toBeInTheDocument();
+            expect(screen.getByText(/Checking access/)).toBeInTheDocument();
         });
     });
 
@@ -79,20 +77,20 @@ describe("ProtectedRoute", () => {
                 </ProtectedRoute>
             );
 
-            expect(screen.getByText(/Unauthorized/)).toBeInTheDocument();
+            expect(screen.getByText(/Sign in required/)).toBeInTheDocument();
             expect(
-                screen.getByText(/Redirecting to login/)
+                screen.getByText(/Redirecting you to the sign-in page/)
             ).toBeInTheDocument();
         });
 
-        it("should show access denied terminal frame", () => {
+        it("should show access denied panel", () => {
             render(
                 <ProtectedRoute>
                     <div>Protected Content</div>
                 </ProtectedRoute>
             );
 
-            expect(screen.getByText("[ ACCESS_DENIED ]")).toBeInTheDocument();
+            expect(screen.getByText(/Sign in required/)).toBeInTheDocument();
         });
 
         it("should not render protected content", () => {
@@ -146,9 +144,11 @@ describe("ProtectedRoute", () => {
             );
 
             expect(
-                screen.queryByText(/Verifying credentials/)
+                screen.queryByText(/Checking access/)
             ).not.toBeInTheDocument();
-            expect(screen.queryByText(/Unauthorized/)).not.toBeInTheDocument();
+            expect(
+                screen.queryByText(/Sign in required/)
+            ).not.toBeInTheDocument();
         });
     });
 
@@ -165,9 +165,7 @@ describe("ProtectedRoute", () => {
                 </ProtectedRoute>
             );
 
-            expect(
-                screen.getByText(/Verifying credentials/)
-            ).toBeInTheDocument();
+            expect(screen.getByText(/Checking access/)).toBeInTheDocument();
 
             mockUseAuth.mockReturnValue({
                 isAuthenticated: true,

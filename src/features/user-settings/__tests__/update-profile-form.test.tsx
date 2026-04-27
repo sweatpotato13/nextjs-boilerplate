@@ -28,7 +28,7 @@ describe("UpdateProfileForm", () => {
                 onUpdateProfile={mockOnUpdateProfile}
             />
         );
-        expect(screen.getByText(/EDIT_PROFILE:/)).toBeInTheDocument();
+        expect(screen.getByText("Edit profile")).toBeInTheDocument();
     });
 
     it("should render full name input with initial value", () => {
@@ -77,7 +77,7 @@ describe("UpdateProfileForm", () => {
             />
         );
         expect(
-            screen.getByRole("button", { name: "[SAVE]" })
+            screen.getByRole("button", { name: "Save changes" })
         ).toBeInTheDocument();
     });
 
@@ -155,7 +155,7 @@ describe("UpdateProfileForm", () => {
         fireEvent.change(fullNameInput, { target: { value: "Updated Name" } });
         fireEvent.change(bioTextarea, { target: { value: "Updated bio" } });
 
-        fireEvent.click(screen.getByRole("button", { name: "[SAVE]" }));
+        fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
 
         expect(mockOnUpdateProfile).toHaveBeenCalledWith({
             fullName: "Updated Name",

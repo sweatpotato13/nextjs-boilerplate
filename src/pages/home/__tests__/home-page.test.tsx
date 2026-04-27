@@ -2,17 +2,16 @@ import { render, screen } from "@testing-library/react";
 
 import { HomePage } from "../ui";
 
-// Mock TerminalFrame
 jest.mock("@shared/ui", () => ({
-    TerminalFrame: ({
+    PanelFrame: ({
         title,
         children,
     }: {
         title: string;
         children: React.ReactNode;
     }) => (
-        <div data-testid="terminal-frame">
-            <span data-testid="terminal-title">{title}</span>
+        <div data-testid="panel-frame">
+            <span data-testid="panel-title">{title}</span>
             {children}
         </div>
     ),
@@ -29,26 +28,24 @@ describe("HomePage", () => {
         expect(screen.getByRole("main")).toBeInTheDocument();
     });
 
-    it("should render TerminalFrame with correct title", () => {
+    it("should render the hero copy", () => {
         render(<HomePage />);
-        expect(screen.getByTestId("terminal-title")).toHaveTextContent(
-            "TODO TERMINAL v1.0"
-        );
+        expect(screen.getByText("Next.js Boilerplate")).toBeInTheDocument();
+        expect(
+            screen.getByText("Organize work with clarity and calm.")
+        ).toBeInTheDocument();
     });
 
-    it("should render ASCII art header", () => {
+    it("should render supporting badges", () => {
         render(<HomePage />);
-        const preElement = document.querySelector("pre");
-        expect(preElement).toBeInTheDocument();
-        // Check for part of the ASCII art
-        expect(preElement).toHaveTextContent(/___/);
+        expect(screen.getByText("Task planning")).toBeInTheDocument();
+        expect(screen.getByText("Progress tracking")).toBeInTheDocument();
+        expect(screen.getByText("Clean settings")).toBeInTheDocument();
     });
 
-    it("should render boot sequence messages", () => {
+    it("should render the focus state card", () => {
         render(<HomePage />);
-        expect(screen.getByText(/System initialized/)).toBeInTheDocument();
-        expect(screen.getByText(/Loading task manager/)).toBeInTheDocument();
-        expect(screen.getByText(/Ready/)).toBeInTheDocument();
+        expect(screen.getByText("Focus state")).toBeInTheDocument();
     });
 
     it("should render TodoList widget", () => {
@@ -59,7 +56,7 @@ describe("HomePage", () => {
     it("should have responsive padding classes", () => {
         render(<HomePage />);
         const main = screen.getByRole("main");
-        expect(main).toHaveClass("p-4", "md:p-8", "lg:p-12");
+        expect(main).toHaveClass("px-4", "py-8", "md:px-8", "lg:px-12");
     });
 
     it("should have min-height screen class", () => {
@@ -70,7 +67,7 @@ describe("HomePage", () => {
 
     it("should have max-width container", () => {
         const { container } = render(<HomePage />);
-        const maxWidthContainer = container.querySelector(".max-w-2xl");
+        const maxWidthContainer = container.querySelector(".max-w-7xl");
         expect(maxWidthContainer).toBeInTheDocument();
     });
 });

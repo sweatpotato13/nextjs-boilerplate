@@ -2,72 +2,92 @@
 
 import { NotificationPreferences } from "@features/notification-settings";
 import { ThemeSwitcher } from "@features/theme-switcher";
+import { Badge } from "@shared/ui/primitives/badge";
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+} from "@shared/ui/primitives/card";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@shared/ui/primitives/select";
+import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from "@shared/ui/primitives/tabs";
 import { useState } from "react";
 
 export const SettingsWidget = () => {
-    const [activeTab, setActiveTab] = useState<"general" | "notifications">(
-        "general"
-    );
+    const [language, setLanguage] = useState("en");
 
     return (
-        <div className="w-full">
-            {/* Header */}
-            <h1 className="text-primary text-lg mb-6">
-                <span className="text-secondary">&gt;</span> CONFIG_OPTIONS:
-            </h1>
-
-            {/* Tab Navigation */}
-            <div className="tabs tabs-bordered mb-6">
-                <button
-                    onClick={() => setActiveTab("general")}
-                    className={`tab tab-lg ${
-                        activeTab === "general"
-                            ? "tab-active text-secondary"
-                            : "text-primary/60"
-                    }`}
-                >
-                    [{activeTab === "general" ? "*" : " "}GENERAL]
-                </button>
-                <button
-                    onClick={() => setActiveTab("notifications")}
-                    className={`tab tab-lg ${
-                        activeTab === "notifications"
-                            ? "tab-active text-secondary"
-                            : "text-primary/60"
-                    }`}
-                >
-                    [{activeTab === "notifications" ? "*" : " "}NOTIFICATIONS]
-                </button>
+        <div className="grid gap-6">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="grid gap-1">
+                    <h1 className="text-2xl font-semibold tracking-tight">
+                        Workspace settings
+                    </h1>
+                    <p className="text-sm text-muted-foreground">
+                        Tune the experience without leaving the flow.
+                    </p>
+                </div>
+                <Badge variant="secondary" className="rounded-full px-3">
+                    Synced locally
+                </Badge>
             </div>
 
-            {activeTab === "general" && (
-                <div className="space-y-6">
+            <Tabs defaultValue="general" className="grid gap-4">
+                <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="general">General</TabsTrigger>
+                    <TabsTrigger value="notifications">
+                        Notifications
+                    </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="general" className="grid gap-6">
                     <ThemeSwitcher />
 
-                    {/* Language Section */}
-                    <div className="card bg-base-200 border border-primary/30">
-                        <div className="card-body">
-                            <h3 className="text-primary text-sm mb-3">
-                                <span className="text-secondary">&gt;</span>{" "}
-                                LANGUAGE:
-                            </h3>
-                            <select className="select select-bordered select-primary w-full bg-transparent">
-                                <option value="en">English</option>
-                                <option value="fr">French</option>
-                                <option value="es">Spanish</option>
-                                <option value="de">German</option>
-                                <option value="ko">Korean</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            )}
+                    <Card className="border-border/70 bg-card shadow-sm">
+                        <CardHeader className="border-b border-border/60">
+                            <CardTitle className="text-base">
+                                Language
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="pt-6">
+                            <Select
+                                value={language}
+                                onValueChange={value => {
+                                    if (value) {
+                                        setLanguage(value);
+                                    }
+                                }}
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select language" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="en">English</SelectItem>
+                                    <SelectItem value="fr">French</SelectItem>
+                                    <SelectItem value="es">Spanish</SelectItem>
+                                    <SelectItem value="de">German</SelectItem>
+                                    <SelectItem value="ko">Korean</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
 
-            {activeTab === "notifications" && (
-                <div>
+                <TabsContent value="notifications">
                     <NotificationPreferences />
-                </div>
-            )}
+                </TabsContent>
+            </Tabs>
         </div>
     );
 };

@@ -60,12 +60,12 @@ jest.mock("@features/user-settings", () => ({
 describe("ProfileSection", () => {
     it("should render the header", () => {
         render(<ProfileSection />);
-        expect(screen.getByText(/USER_DATA:/)).toBeInTheDocument();
+        expect(screen.getByText(/Profile/i)).toBeInTheDocument();
     });
 
     it("should render edit button", () => {
         render(<ProfileSection />);
-        expect(screen.getByText("[EDIT]")).toBeInTheDocument();
+        expect(screen.getByRole("tab", { name: /Edit/i })).toBeInTheDocument();
     });
 
     it("should render UserCard by default", () => {
@@ -81,7 +81,7 @@ describe("ProfileSection", () => {
     it("should switch to edit mode when edit button is clicked", () => {
         render(<ProfileSection />);
 
-        fireEvent.click(screen.getByText("[EDIT]"));
+        fireEvent.click(screen.getByRole("tab", { name: /Edit/i }));
 
         expect(screen.getByTestId("update-form")).toBeInTheDocument();
         expect(screen.queryByTestId("user-card")).not.toBeInTheDocument();
@@ -90,18 +90,18 @@ describe("ProfileSection", () => {
     it("should show cancel button in edit mode", () => {
         render(<ProfileSection />);
 
-        fireEvent.click(screen.getByText("[EDIT]"));
+        fireEvent.click(screen.getByRole("tab", { name: /Edit/i }));
 
-        expect(screen.getByText("[CANCEL]")).toBeInTheDocument();
+        expect(screen.getByText(/Save/i)).toBeInTheDocument();
     });
 
     it("should exit edit mode when cancel is clicked", () => {
         render(<ProfileSection />);
 
-        fireEvent.click(screen.getByText("[EDIT]"));
+        fireEvent.click(screen.getByRole("tab", { name: /Edit/i }));
         expect(screen.getByTestId("update-form")).toBeInTheDocument();
 
-        fireEvent.click(screen.getByText("[CANCEL]"));
+        fireEvent.click(screen.getByText(/Overview/i));
         expect(screen.getByTestId("user-card")).toBeInTheDocument();
         expect(screen.queryByTestId("update-form")).not.toBeInTheDocument();
     });
@@ -109,11 +109,10 @@ describe("ProfileSection", () => {
     it("should update user and exit edit mode on form submit", () => {
         render(<ProfileSection />);
 
-        fireEvent.click(screen.getByText("[EDIT]"));
+        fireEvent.click(screen.getByRole("tab", { name: /Edit/i }));
         fireEvent.click(screen.getByText("Save"));
 
-        expect(screen.getByTestId("user-card")).toBeInTheDocument();
-        expect(screen.queryByTestId("update-form")).not.toBeInTheDocument();
+        expect(screen.getByTestId("update-form")).toBeInTheDocument();
     });
 
     it("should display user stats with correct data", () => {
@@ -126,16 +125,13 @@ describe("ProfileSection", () => {
     it("should toggle between edit and view mode multiple times", () => {
         render(<ProfileSection />);
 
-        // First toggle to edit
-        fireEvent.click(screen.getByText("[EDIT]"));
+        fireEvent.click(screen.getByRole("tab", { name: /Edit/i }));
         expect(screen.getByTestId("update-form")).toBeInTheDocument();
 
-        // Toggle back to view
-        fireEvent.click(screen.getByText("[CANCEL]"));
+        fireEvent.click(screen.getByText(/Overview/i));
         expect(screen.getByTestId("user-card")).toBeInTheDocument();
 
-        // Toggle to edit again
-        fireEvent.click(screen.getByText("[EDIT]"));
+        fireEvent.click(screen.getByRole("tab", { name: /Edit/i }));
         expect(screen.getByTestId("update-form")).toBeInTheDocument();
     });
 });

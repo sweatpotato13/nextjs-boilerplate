@@ -5,82 +5,80 @@ import { ThemeSwitcher } from "../ui";
 describe("ThemeSwitcher", () => {
     beforeEach(() => {
         localStorage.clear();
-        document.documentElement.removeAttribute("data-theme");
+        document.documentElement.classList.remove("dark");
+        window.matchMedia = jest.fn().mockImplementation(query => ({
+            matches: query === "(prefers-color-scheme: dark)",
+            media: query,
+            onchange: null,
+            addEventListener: jest.fn(),
+            removeEventListener: jest.fn(),
+            addListener: jest.fn(),
+            removeListener: jest.fn(),
+            dispatchEvent: jest.fn(),
+        })) as unknown as typeof window.matchMedia;
     });
 
     it("should render the header", () => {
         render(<ThemeSwitcher />);
-        expect(screen.getByText(/APPEARANCE:/)).toBeInTheDocument();
+        expect(screen.getByText(/Appearance/i)).toBeInTheDocument();
     });
 
     it("should render all theme options", () => {
         render(<ThemeSwitcher />);
 
-        expect(screen.getByText("Terminal")).toBeInTheDocument();
-        expect(screen.getByText("Dark")).toBeInTheDocument();
-        expect(screen.getByText("Cyberpunk")).toBeInTheDocument();
         expect(screen.getByText("Light")).toBeInTheDocument();
+        expect(screen.getByText("Dark")).toBeInTheDocument();
+        expect(screen.getByText("System")).toBeInTheDocument();
     });
 
-    it("should render 4 radio buttons", () => {
+    it("should render 3 radio buttons", () => {
         render(<ThemeSwitcher />);
         const radios = screen.getAllByRole("radio");
-        expect(radios).toHaveLength(4);
+        expect(radios).toHaveLength(3);
     });
 
-    it("should have terminal as default theme", () => {
+    it("should have light as default theme", () => {
         render(<ThemeSwitcher />);
-        const terminalRadio = screen.getByLabelText("Terminal");
-        expect(terminalRadio).toBeChecked();
-    });
-
-    it("should display current theme badge", () => {
-        render(<ThemeSwitcher />);
-        expect(screen.getByText("TERMINAL")).toBeInTheDocument();
+        expect(screen.getAllByRole("radio")[0]).toBeChecked();
     });
 
     it("should use initialTheme prop when provided", () => {
         render(<ThemeSwitcher initialTheme="dark" />);
-        const darkRadio = screen.getByLabelText("Dark");
+        const darkRadio = screen.getAllByRole("radio")[1];
         expect(darkRadio).toBeChecked();
-        expect(screen.getByText("DARK")).toBeInTheDocument();
     });
 
     it("should change theme when radio is clicked", () => {
         render(<ThemeSwitcher />);
 
-        const darkRadio = screen.getByLabelText("Dark");
+        const darkRadio = screen.getAllByRole("radio")[1];
         fireEvent.click(darkRadio);
 
         expect(darkRadio).toBeChecked();
-        expect(screen.getByText("DARK")).toBeInTheDocument();
+        expect(document.documentElement.classList.contains("dark")).toBe(true);
     });
 
-    it("should update document data-theme attribute on theme change", () => {
+    it("should toggle dark class on document element", () => {
         render(<ThemeSwitcher />);
 
-        const cyberpunkRadio = screen.getByLabelText("Cyberpunk");
-        fireEvent.click(cyberpunkRadio);
+        fireEvent.click(screen.getAllByRole("radio")[1]);
 
-        expect(document.documentElement.getAttribute("data-theme")).toBe(
-            "cyberpunk"
-        );
+        expect(document.documentElement).toHaveClass("dark");
     });
 
     it("should persist theme to localStorage", () => {
         render(<ThemeSwitcher />);
 
-        const lightRadio = screen.getByLabelText("Light");
-        fireEvent.click(lightRadio);
+        fireEvent.click(screen.getAllByRole("radio")[2]);
 
-        expect(localStorage.getItem("theme")).toBe("light");
+        expect(localStorage.getItem("theme")).toBe("system");
     });
 
     it("should call onThemeChange callback when provided", () => {
         const handleThemeChange = jest.fn();
         render(<ThemeSwitcher onThemeChange={handleThemeChange} />);
 
-        const darkRadio = screen.getByLabelText("Dark");
+        const darkRadio = screen.getAllByRole("radio")[1];
         fireEvent.click(darkRadio);
 
         expect(handleThemeChange).toHaveBeenCalledWith("dark");
@@ -89,7 +87,7 @@ describe("ThemeSwitcher", () => {
     it("should not throw when onThemeChange is not provided", () => {
         render(<ThemeSwitcher />);
 
-        const darkRadio = screen.getByLabelText("Dark");
+        const darkRadio = screen.getAllByRole("radio")[1];
         expect(() => fireEvent.click(darkRadio)).not.toThrow();
     });
 
@@ -97,23 +95,10 @@ describe("ThemeSwitcher", () => {
         const handleThemeChange = jest.fn();
         render(<ThemeSwitcher onThemeChange={handleThemeChange} />);
 
-        fireEvent.click(screen.getByLabelText("Dark"));
+        fireEvent.click(screen.getAllByRole("radio")[1]);
         expect(handleThemeChange).toHaveBeenLastCalledWith("dark");
 
-        fireEvent.click(screen.getByLabelText("Cyberpunk"));
-        expect(handleThemeChange).toHaveBeenLastCalledWith("cyberpunk");
-
-        fireEvent.click(screen.getByLabelText("Light"));
-        expect(handleThemeChange).toHaveBeenLastCalledWith("light");
-
-        fireEvent.click(screen.getByLabelText("Terminal"));
-        expect(handleThemeChange).toHaveBeenLastCalledWith("terminal");
-    });
-
-    it("should set initial theme on document", () => {
-        render(<ThemeSwitcher initialTheme="cyberpunk" />);
-        expect(document.documentElement.getAttribute("data-theme")).toBe(
-            "cyberpunk"
-        );
+        fireEvent.click(screen.getAllByRole("radio")[2]);
+        expect(handleThemeChange).toHaveBeenLastCalledWith("system");
     });
 });

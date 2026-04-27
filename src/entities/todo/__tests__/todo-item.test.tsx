@@ -18,6 +18,12 @@ describe("TodoItem", () => {
         jest.clearAllMocks();
     });
 
+    beforeAll(() => {
+        if (typeof globalThis.PointerEvent === "undefined") {
+            globalThis.PointerEvent = MouseEvent as typeof PointerEvent;
+        }
+    });
+
     it("should render todo text", () => {
         render(
             <TodoItem
@@ -37,7 +43,7 @@ describe("TodoItem", () => {
                 onDelete={mockOnDelete}
             />
         );
-        expect(screen.getByText("[ ]")).toBeInTheDocument();
+        expect(screen.getByText("Open")).toBeInTheDocument();
     });
 
     it("should render checked checkbox for completed todo", () => {
@@ -49,7 +55,7 @@ describe("TodoItem", () => {
                 onDelete={mockOnDelete}
             />
         );
-        expect(screen.getByText("[x]")).toBeInTheDocument();
+        expect(screen.getByText("Done")).toBeInTheDocument();
     });
 
     it("should call onToggle with todo id when checkbox is clicked", () => {
@@ -61,7 +67,7 @@ describe("TodoItem", () => {
             />
         );
 
-        const checkbox = screen.getByRole("button", {
+        const checkbox = screen.getByRole("checkbox", {
             name: /Mark as complete/,
         });
         fireEvent.click(checkbox);
@@ -80,7 +86,7 @@ describe("TodoItem", () => {
         );
 
         expect(
-            screen.getByRole("button", { name: "Mark as complete" })
+            screen.getByRole("checkbox", { name: "Mark as complete" })
         ).toBeInTheDocument();
     });
 
@@ -95,7 +101,7 @@ describe("TodoItem", () => {
         );
 
         expect(
-            screen.getByRole("button", { name: "Mark as incomplete" })
+            screen.getByRole("checkbox", { name: "Mark as incomplete" })
         ).toBeInTheDocument();
     });
 
@@ -110,7 +116,7 @@ describe("TodoItem", () => {
         expect(
             screen.getByRole("button", { name: "Delete task" })
         ).toBeInTheDocument();
-        expect(screen.getByText("[DEL]")).toBeInTheDocument();
+        expect(screen.getByText("×")).toBeInTheDocument();
     });
 
     it("should call onDelete with todo id when delete button is clicked", () => {

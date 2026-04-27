@@ -2,17 +2,17 @@ import { render, screen } from "@testing-library/react";
 
 import { AboutPage } from "../ui";
 
-// Mock TerminalFrame
+// Mock PanelFrame
 jest.mock("@shared/ui", () => ({
-    TerminalFrame: ({
+    PanelFrame: ({
         title,
         children,
     }: {
         title: string;
         children: React.ReactNode;
     }) => (
-        <div data-testid="terminal-frame">
-            <span data-testid="terminal-title">{title}</span>
+        <div data-testid="panel-frame">
+            <span data-testid="panel-title">{title}</span>
             {children}
         </div>
     ),
@@ -24,87 +24,50 @@ describe("AboutPage", () => {
         expect(screen.getByRole("main")).toBeInTheDocument();
     });
 
-    it("should render TerminalFrame with correct title", () => {
+    it("should render PanelFrame with correct title", () => {
         render(<AboutPage />);
-        expect(screen.getByTestId("terminal-title")).toHaveTextContent(
-            "ABOUT.md"
+        expect(screen.getByTestId("panel-title")).toHaveTextContent(
+            "Design system"
         );
     });
 
-    it("should render terminal boot sequence", () => {
+    it("should render intro copy", () => {
         render(<AboutPage />);
-        expect(screen.getByText(/cat ABOUT.md/)).toBeInTheDocument();
-        expect(screen.getByText(/Loading documentation/)).toBeInTheDocument();
-    });
-
-    it("should render ASCII art header", () => {
-        render(<AboutPage />);
-        const preElement = document.querySelector("pre");
-        expect(preElement).toBeInTheDocument();
-        // Check for part of the ASCII art
-        expect(preElement).toHaveTextContent(/___/);
-    });
-
-    it("should render WHAT_IS_FSD section", () => {
-        render(<AboutPage />);
-        expect(screen.getByText(/WHAT_IS_FSD:/)).toBeInTheDocument();
         expect(
-            screen.getByText(
-                /Feature-Sliced Design \(FSD\) is an architectural/
-            )
+            screen.getByText("Built around Feature-Sliced Design.")
+        ).toBeInTheDocument();
+        expect(screen.getByText("Architecture overview")).toBeInTheDocument();
+        expect(screen.getByText("Principles")).toBeInTheDocument();
+    });
+
+    it("should render content sections", () => {
+        render(<AboutPage />);
+        expect(
+            screen.getByText("Promotes reusable building blocks")
         ).toBeInTheDocument();
     });
 
-    it("should render KEY_PRINCIPLES section", () => {
+    it("should render benefits copy", () => {
         render(<AboutPage />);
-        expect(screen.getByText(/KEY_PRINCIPLES:/)).toBeInTheDocument();
-        expect(screen.getByText(/Layers:/)).toBeInTheDocument();
-        expect(screen.getByText(/Slices:/)).toBeInTheDocument();
-        expect(screen.getByText(/Segments:/)).toBeInTheDocument();
-        expect(screen.getByText(/Public API:/)).toBeInTheDocument();
-    });
-
-    it("should render BENEFITS section", () => {
-        render(<AboutPage />);
-        expect(screen.getByText(/BENEFITS:/)).toBeInTheDocument();
         expect(
-            screen.getByText(/Clear structure for large applications/)
-        ).toBeInTheDocument();
-        expect(
-            screen.getByText(/Promotes code reusability/)
+            screen.getByText("Scales across teams and features")
         ).toBeInTheDocument();
     });
 
-    it("should render all benefits", () => {
+    it("should render main element and container", () => {
         render(<AboutPage />);
-
-        const benefits = [
-            "Clear structure for large applications",
-            "Promotes code reusability",
-            "Makes onboarding new developers easier",
-            "Prevents dependency issues",
-            "Facilitates parallel development",
-        ];
-
-        benefits.forEach(benefit => {
-            expect(screen.getByText(benefit)).toBeInTheDocument();
-        });
-    });
-
-    it("should render EOF marker", () => {
-        render(<AboutPage />);
-        expect(screen.getByText(/EOF/)).toBeInTheDocument();
+        expect(screen.getByRole("main")).toBeInTheDocument();
     });
 
     it("should have responsive padding classes", () => {
         render(<AboutPage />);
         const main = screen.getByRole("main");
-        expect(main).toHaveClass("p-4", "md:p-8", "lg:p-12");
+        expect(main).toHaveClass("px-4", "py-8", "md:px-8", "lg:px-12");
     });
 
     it("should have max-width container", () => {
         const { container } = render(<AboutPage />);
-        const maxWidthContainer = container.querySelector(".max-w-4xl");
+        const maxWidthContainer = container.querySelector(".max-w-5xl");
         expect(maxWidthContainer).toBeInTheDocument();
     });
 });

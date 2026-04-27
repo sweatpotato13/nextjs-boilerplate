@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@entities/session";
+import { Button } from "@shared/ui/primitives/button";
 import { useRouter } from "next/navigation";
 
 export const LogoutButton = () => {
@@ -13,11 +14,8 @@ export const LogoutButton = () => {
     };
 
     return (
-        <button
-            onClick={handleLogout}
-            className="text-primary/70 hover:text-error transition-colors"
-        >
-            [LOGOUT]
-        </button>
+        <Button variant="ghost" size="sm" onClick={handleLogout}>
+            Sign out
+        </Button>
     );
 };

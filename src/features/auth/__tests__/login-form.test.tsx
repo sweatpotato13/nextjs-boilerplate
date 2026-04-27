@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 
 import { LoginForm } from "../login/ui";
 
-// Mock the useAuth hook
 const mockLogin = jest.fn();
 const mockUseAuth = jest.fn();
 
@@ -16,9 +15,7 @@ describe("LoginForm", () => {
     beforeEach(() => {
         jest.clearAllMocks();
         jest.useFakeTimers();
-        mockUseAuth.mockReturnValue({
-            login: mockLogin,
-        });
+        mockUseAuth.mockReturnValue({ login: mockLogin });
     });
 
     afterEach(() => {
@@ -29,42 +26,40 @@ describe("LoginForm", () => {
         it("should render user id input", () => {
             render(<LoginForm />);
             expect(
-                screen.getByPlaceholderText("Enter user ID...")
+                screen.getByPlaceholderText("Enter your user ID")
             ).toBeInTheDocument();
         });
 
         it("should render password input", () => {
             render(<LoginForm />);
             expect(
-                screen.getByPlaceholderText("Enter password...")
+                screen.getByPlaceholderText("Enter your password")
             ).toBeInTheDocument();
         });
 
         it("should render submit button", () => {
             render(<LoginForm />);
             expect(
-                screen.getByRole("button", { name: "[ AUTHENTICATE ]" })
+                screen.getByRole("button", { name: "Sign in" })
             ).toBeInTheDocument();
         });
 
         it("should render hint text", () => {
             render(<LoginForm />);
-            expect(
-                screen.getByText(/Demo credentials are admin \/ 1234/)
-            ).toBeInTheDocument();
+            expect(screen.getByText(/Demo: admin \/ 1234/)).toBeInTheDocument();
         });
 
         it("should render labels", () => {
             render(<LoginForm />);
-            expect(screen.getByText(/USER_ID:/)).toBeInTheDocument();
-            expect(screen.getByText(/PASSWORD:/)).toBeInTheDocument();
+            expect(screen.getByText("User ID")).toBeInTheDocument();
+            expect(screen.getByText("Password")).toBeInTheDocument();
         });
     });
 
     describe("form interaction", () => {
         it("should update user id on input change", () => {
             render(<LoginForm />);
-            const input = screen.getByPlaceholderText("Enter user ID...");
+            const input = screen.getByPlaceholderText("Enter your user ID");
 
             fireEvent.change(input, { target: { value: "testuser" } });
 
@@ -73,7 +68,7 @@ describe("LoginForm", () => {
 
         it("should update password on input change", () => {
             render(<LoginForm />);
-            const input = screen.getByPlaceholderText("Enter password...");
+            const input = screen.getByPlaceholderText("Enter your password");
 
             fireEvent.change(input, { target: { value: "password123" } });
 
@@ -82,75 +77,72 @@ describe("LoginForm", () => {
 
         it("should disable submit button when fields are empty", () => {
             render(<LoginForm />);
-            const button = screen.getByRole("button", {
-                name: "[ AUTHENTICATE ]",
-            });
-
-            expect(button).toBeDisabled();
+            expect(
+                screen.getByRole("button", { name: "Sign in" })
+            ).toBeDisabled();
         });
 
         it("should disable submit button when only user id is filled", () => {
             render(<LoginForm />);
-            const userIdInput = screen.getByPlaceholderText("Enter user ID...");
+            const userIdInput =
+                screen.getByPlaceholderText("Enter your user ID");
             fireEvent.change(userIdInput, { target: { value: "admin" } });
 
-            const button = screen.getByRole("button", {
-                name: "[ AUTHENTICATE ]",
-            });
-            expect(button).toBeDisabled();
+            expect(
+                screen.getByRole("button", { name: "Sign in" })
+            ).toBeDisabled();
         });
 
         it("should enable submit button when both fields are filled", () => {
             render(<LoginForm />);
-            const userIdInput = screen.getByPlaceholderText("Enter user ID...");
-            const passwordInput =
-                screen.getByPlaceholderText("Enter password...");
+            const userIdInput =
+                screen.getByPlaceholderText("Enter your user ID");
+            const passwordInput = screen.getByPlaceholderText(
+                "Enter your password"
+            );
 
             fireEvent.change(userIdInput, { target: { value: "admin" } });
             fireEvent.change(passwordInput, { target: { value: "1234" } });
 
-            const button = screen.getByRole("button", {
-                name: "[ AUTHENTICATE ]",
-            });
-            expect(button).not.toBeDisabled();
+            expect(
+                screen.getByRole("button", { name: "Sign in" })
+            ).not.toBeDisabled();
         });
     });
 
     describe("form submission", () => {
-        it("should show authenticating message during submission", () => {
+        it("should show signing in message during submission", () => {
             mockLogin.mockReturnValue(true);
             render(<LoginForm />);
 
-            const userIdInput = screen.getByPlaceholderText("Enter user ID...");
-            const passwordInput =
-                screen.getByPlaceholderText("Enter password...");
+            const userIdInput =
+                screen.getByPlaceholderText("Enter your user ID");
+            const passwordInput = screen.getByPlaceholderText(
+                "Enter your password"
+            );
 
             fireEvent.change(userIdInput, { target: { value: "admin" } });
             fireEvent.change(passwordInput, { target: { value: "1234" } });
 
-            fireEvent.click(
-                screen.getByRole("button", { name: "[ AUTHENTICATE ]" })
-            );
+            fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
 
-            expect(
-                screen.getByText(/Authenticating user.../)
-            ).toBeInTheDocument();
+            expect(screen.getByText(/Signing in…/)).toBeInTheDocument();
         });
 
         it("should disable inputs during authentication", () => {
             mockLogin.mockReturnValue(true);
             render(<LoginForm />);
 
-            const userIdInput = screen.getByPlaceholderText("Enter user ID...");
-            const passwordInput =
-                screen.getByPlaceholderText("Enter password...");
+            const userIdInput =
+                screen.getByPlaceholderText("Enter your user ID");
+            const passwordInput = screen.getByPlaceholderText(
+                "Enter your password"
+            );
 
             fireEvent.change(userIdInput, { target: { value: "admin" } });
             fireEvent.change(passwordInput, { target: { value: "1234" } });
 
-            fireEvent.click(
-                screen.getByRole("button", { name: "[ AUTHENTICATE ]" })
-            );
+            fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
 
             expect(userIdInput).toBeDisabled();
             expect(passwordInput).toBeDisabled();
@@ -160,20 +152,19 @@ describe("LoginForm", () => {
             mockLogin.mockReturnValue(true);
             render(<LoginForm />);
 
-            const userIdInput = screen.getByPlaceholderText("Enter user ID...");
-            const passwordInput =
-                screen.getByPlaceholderText("Enter password...");
+            const userIdInput =
+                screen.getByPlaceholderText("Enter your user ID");
+            const passwordInput = screen.getByPlaceholderText(
+                "Enter your password"
+            );
 
             fireEvent.change(userIdInput, { target: { value: "admin" } });
             fireEvent.change(passwordInput, { target: { value: "1234" } });
 
-            fireEvent.click(
-                screen.getByRole("button", { name: "[ AUTHENTICATE ]" })
-            );
+            fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
 
-            // Advance timers to complete the async authentication
             await act(() => {
-                jest.advanceTimersByTime(1000);
+                jest.advanceTimersByTime(600);
                 return Promise.resolve();
             });
 
@@ -186,19 +177,19 @@ describe("LoginForm", () => {
             const pushMock = router.push;
             render(<LoginForm />);
 
-            const userIdInput = screen.getByPlaceholderText("Enter user ID...");
-            const passwordInput =
-                screen.getByPlaceholderText("Enter password...");
+            const userIdInput =
+                screen.getByPlaceholderText("Enter your user ID");
+            const passwordInput = screen.getByPlaceholderText(
+                "Enter your password"
+            );
 
             fireEvent.change(userIdInput, { target: { value: "admin" } });
             fireEvent.change(passwordInput, { target: { value: "1234" } });
 
-            fireEvent.click(
-                screen.getByRole("button", { name: "[ AUTHENTICATE ]" })
-            );
+            fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
 
             await act(() => {
-                jest.advanceTimersByTime(1000);
+                jest.advanceTimersByTime(600);
                 return Promise.resolve();
             });
 
@@ -209,24 +200,24 @@ describe("LoginForm", () => {
             mockLogin.mockReturnValue(false);
             render(<LoginForm />);
 
-            const userIdInput = screen.getByPlaceholderText("Enter user ID...");
-            const passwordInput =
-                screen.getByPlaceholderText("Enter password...");
+            const userIdInput =
+                screen.getByPlaceholderText("Enter your user ID");
+            const passwordInput = screen.getByPlaceholderText(
+                "Enter your password"
+            );
 
             fireEvent.change(userIdInput, { target: { value: "wrong" } });
             fireEvent.change(passwordInput, { target: { value: "creds" } });
 
-            fireEvent.click(
-                screen.getByRole("button", { name: "[ AUTHENTICATE ]" })
-            );
+            fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
 
             await act(() => {
-                jest.advanceTimersByTime(1000);
+                jest.advanceTimersByTime(600);
                 return Promise.resolve();
             });
 
             expect(
-                screen.getByText("ACCESS DENIED. Invalid credentials.")
+                screen.getByText("Invalid credentials. Please try again.")
             ).toBeInTheDocument();
         });
 
@@ -236,19 +227,19 @@ describe("LoginForm", () => {
             const pushMock = router.push;
             render(<LoginForm />);
 
-            const userIdInput = screen.getByPlaceholderText("Enter user ID...");
-            const passwordInput =
-                screen.getByPlaceholderText("Enter password...");
+            const userIdInput =
+                screen.getByPlaceholderText("Enter your user ID");
+            const passwordInput = screen.getByPlaceholderText(
+                "Enter your password"
+            );
 
             fireEvent.change(userIdInput, { target: { value: "wrong" } });
             fireEvent.change(passwordInput, { target: { value: "creds" } });
 
-            fireEvent.click(
-                screen.getByRole("button", { name: "[ AUTHENTICATE ]" })
-            );
+            fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
 
             await act(() => {
-                jest.advanceTimersByTime(1000);
+                jest.advanceTimersByTime(600);
                 return Promise.resolve();
             });
 
@@ -259,36 +250,31 @@ describe("LoginForm", () => {
             mockLogin.mockReturnValueOnce(false).mockReturnValueOnce(true);
             render(<LoginForm />);
 
-            const userIdInput = screen.getByPlaceholderText("Enter user ID...");
-            const passwordInput =
-                screen.getByPlaceholderText("Enter password...");
-
-            // First failed attempt
-            fireEvent.change(userIdInput, { target: { value: "wrong" } });
-            fireEvent.change(passwordInput, { target: { value: "creds" } });
-            fireEvent.click(
-                screen.getByRole("button", { name: "[ AUTHENTICATE ]" })
+            const userIdInput =
+                screen.getByPlaceholderText("Enter your user ID");
+            const passwordInput = screen.getByPlaceholderText(
+                "Enter your password"
             );
 
+            fireEvent.change(userIdInput, { target: { value: "wrong" } });
+            fireEvent.change(passwordInput, { target: { value: "creds" } });
+            fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
+
             await act(() => {
-                jest.advanceTimersByTime(1000);
+                jest.advanceTimersByTime(600);
                 return Promise.resolve();
             });
 
             expect(
-                screen.getByText("ACCESS DENIED. Invalid credentials.")
+                screen.getByText("Invalid credentials. Please try again.")
             ).toBeInTheDocument();
 
-            // Second attempt
             fireEvent.change(userIdInput, { target: { value: "admin" } });
             fireEvent.change(passwordInput, { target: { value: "1234" } });
-            fireEvent.click(
-                screen.getByRole("button", { name: "[ AUTHENTICATE ]" })
-            );
+            fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
 
-            // Error should be cleared
             expect(
-                screen.queryByText("ACCESS DENIED. Invalid credentials.")
+                screen.queryByText("Invalid credentials. Please try again.")
             ).not.toBeInTheDocument();
         });
     });

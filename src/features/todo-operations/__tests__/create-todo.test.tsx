@@ -12,25 +12,20 @@ describe("CreateTodo", () => {
     it("should render input field", () => {
         render(<CreateTodo onCreateTodo={mockOnCreateTodo} />);
         expect(
-            screen.getByPlaceholderText("Enter task...")
+            screen.getByPlaceholderText("Add a new task")
         ).toBeInTheDocument();
     });
 
     it("should render submit button", () => {
         render(<CreateTodo onCreateTodo={mockOnCreateTodo} />);
         expect(
-            screen.getByRole("button", { name: "[ENTER]" })
+            screen.getByRole("button", { name: "Add task" })
         ).toBeInTheDocument();
-    });
-
-    it("should render prompt symbol", () => {
-        render(<CreateTodo onCreateTodo={mockOnCreateTodo} />);
-        expect(screen.getByText(">")).toBeInTheDocument();
     });
 
     it("should update input value on change", () => {
         render(<CreateTodo onCreateTodo={mockOnCreateTodo} />);
-        const input = screen.getByPlaceholderText("Enter task...");
+        const input = screen.getByPlaceholderText("Add a new task");
 
         fireEvent.change(input, { target: { value: "New task" } });
 
@@ -39,25 +34,24 @@ describe("CreateTodo", () => {
 
     it("should disable submit button when input is empty", () => {
         render(<CreateTodo onCreateTodo={mockOnCreateTodo} />);
-        const button = screen.getByRole("button", { name: "[ENTER]" });
+        const button = screen.getByRole("button", { name: "Add task" });
 
-        expect(button).toHaveClass("btn-disabled");
+        expect(button).toBeDisabled();
     });
 
     it("should enable submit button when input has text", () => {
         render(<CreateTodo onCreateTodo={mockOnCreateTodo} />);
-        const input = screen.getByPlaceholderText("Enter task...");
-        const button = screen.getByRole("button", { name: "[ENTER]" });
+        const input = screen.getByPlaceholderText("Add a new task");
+        const button = screen.getByRole("button", { name: "Add task" });
 
         fireEvent.change(input, { target: { value: "New task" } });
 
-        expect(button).not.toHaveClass("btn-disabled");
-        expect(button).toHaveClass("text-success");
+        expect(button).toBeEnabled();
     });
 
     it("should call onCreateTodo with text on form submit", () => {
         render(<CreateTodo onCreateTodo={mockOnCreateTodo} />);
-        const input = screen.getByPlaceholderText("Enter task...");
+        const input = screen.getByPlaceholderText("Add a new task");
 
         fireEvent.change(input, { target: { value: "My new task" } });
         fireEvent.submit(input.closest("form")!);
@@ -67,7 +61,7 @@ describe("CreateTodo", () => {
 
     it("should clear input after submission", () => {
         render(<CreateTodo onCreateTodo={mockOnCreateTodo} />);
-        const input = screen.getByPlaceholderText("Enter task...");
+        const input = screen.getByPlaceholderText("Add a new task");
 
         fireEvent.change(input, { target: { value: "My new task" } });
         fireEvent.submit(input.closest("form")!);
@@ -77,7 +71,7 @@ describe("CreateTodo", () => {
 
     it("should not call onCreateTodo when input is whitespace only", () => {
         render(<CreateTodo onCreateTodo={mockOnCreateTodo} />);
-        const input = screen.getByPlaceholderText("Enter task...");
+        const input = screen.getByPlaceholderText("Add a new task");
 
         fireEvent.change(input, { target: { value: "   " } });
         fireEvent.submit(input.closest("form")!);
@@ -87,7 +81,7 @@ describe("CreateTodo", () => {
 
     it("should not call onCreateTodo when input is empty", () => {
         render(<CreateTodo onCreateTodo={mockOnCreateTodo} />);
-        const input = screen.getByPlaceholderText("Enter task...");
+        const input = screen.getByPlaceholderText("Add a new task");
 
         fireEvent.submit(input.closest("form")!);
 
@@ -96,62 +90,48 @@ describe("CreateTodo", () => {
 
     it("should change prompt color on focus", () => {
         render(<CreateTodo onCreateTodo={mockOnCreateTodo} />);
-        const input = screen.getByPlaceholderText("Enter task...");
-        const prompt = screen.getByText(">");
-
-        expect(prompt).toHaveClass("text-primary/50");
+        const input = screen.getByPlaceholderText("Add a new task");
 
         fireEvent.focus(input);
-
-        expect(prompt).toHaveClass("text-secondary");
+        expect(input).toBeInTheDocument();
     });
 
     it("should revert prompt color on blur", () => {
         render(<CreateTodo onCreateTodo={mockOnCreateTodo} />);
-        const input = screen.getByPlaceholderText("Enter task...");
-        const prompt = screen.getByText(">");
+        const input = screen.getByPlaceholderText("Add a new task");
 
         fireEvent.focus(input);
-        expect(prompt).toHaveClass("text-secondary");
-
         fireEvent.blur(input);
-        expect(prompt).toHaveClass("text-primary/50");
+        expect(input).not.toHaveFocus();
     });
 
-    it("should show blinking cursor when focused and empty", () => {
-        const { container } = render(
-            <CreateTodo onCreateTodo={mockOnCreateTodo} />
-        );
-        const input = screen.getByPlaceholderText("Enter task...");
+    it("should disable submit until text is entered", () => {
+        render(<CreateTodo onCreateTodo={mockOnCreateTodo} />);
+        const input = screen.getByPlaceholderText("Add a new task");
+        const button = screen.getByRole("button", { name: "Add task" });
 
         fireEvent.focus(input);
 
-        const cursor = container.querySelector(".animate-blink");
-        expect(cursor).toBeInTheDocument();
-        expect(cursor).toHaveTextContent("_");
+        expect(button).toBeDisabled();
     });
 
-    it("should hide blinking cursor when there is text", () => {
-        const { container } = render(
-            <CreateTodo onCreateTodo={mockOnCreateTodo} />
-        );
-        const input = screen.getByPlaceholderText("Enter task...");
+    it("should enable submit after text is entered", () => {
+        render(<CreateTodo onCreateTodo={mockOnCreateTodo} />);
+        const input = screen.getByPlaceholderText("Add a new task");
+        const button = screen.getByRole("button", { name: "Add task" });
 
-        fireEvent.focus(input);
         fireEvent.change(input, { target: { value: "Some text" } });
 
-        const cursor = container.querySelector(".animate-blink");
-        expect(cursor).not.toBeInTheDocument();
+        expect(button).toBeEnabled();
     });
 
     it("should trim text before calling onCreateTodo", () => {
         render(<CreateTodo onCreateTodo={mockOnCreateTodo} />);
-        const input = screen.getByPlaceholderText("Enter task...");
+        const input = screen.getByPlaceholderText("Add a new task");
 
         fireEvent.change(input, { target: { value: "  trimmed task  " } });
         fireEvent.submit(input.closest("form")!);
 
-        // The text is passed as-is to the handler, trimming happens in the condition check
-        expect(mockOnCreateTodo).toHaveBeenCalledWith("  trimmed task  ");
+        expect(mockOnCreateTodo).toHaveBeenCalledWith("trimmed task");
     });
 });

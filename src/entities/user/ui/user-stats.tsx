@@ -1,3 +1,12 @@
+import { Badge } from "@shared/ui/primitives/badge";
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+} from "@shared/ui/primitives/card";
+import { Progress } from "@shared/ui/primitives/progress";
+
 import { UserStats } from "../model";
 
 interface UserStatsCardProps {
@@ -5,38 +14,43 @@ interface UserStatsCardProps {
 }
 
 export const UserStatsCard = ({ stats }: UserStatsCardProps) => {
+    const completionRate = stats.tasksCreated
+        ? Math.round((stats.tasksDone / stats.tasksCreated) * 100)
+        : 0;
+
     return (
-        <div className="card bg-base-200 border border-primary/30">
-            <div className="card-body">
-                <h3 className="text-primary text-sm mb-4">
-                    <span className="text-secondary">&gt;</span> ACTIVITY_STATS:
-                </h3>
+        <Card className="border-border/70 bg-card shadow-sm">
+            <CardHeader className="border-b border-border/60">
+                <CardTitle className="text-base">Activity stats</CardTitle>
+            </CardHeader>
 
-                <div className="stats stats-vertical bg-base-300 shadow">
-                    <div className="stat">
-                        <div className="stat-title text-primary/60">
-                            Tasks Completed
-                        </div>
-                        <div className="stat-value text-success">
+            <CardContent className="grid gap-4 pt-6">
+                <div className="grid gap-3 rounded-2xl border border-border/60 bg-muted/30 p-4">
+                    <div className="flex items-center justify-between gap-3">
+                        <span className="text-sm text-muted-foreground">
+                            Tasks completed
+                        </span>
+                        <Badge variant="secondary" className="rounded-full">
                             {stats.tasksDone}
-                        </div>
+                        </Badge>
                     </div>
+                    <Progress value={completionRate} />
+                </div>
 
-                    <div className="stat">
-                        <div className="stat-title text-primary/60">
-                            Tasks Created
-                        </div>
-                        <div className="stat-value text-warning">
+                <div className="grid gap-3 rounded-2xl border border-border/60 bg-muted/30 p-4">
+                    <div className="flex items-center justify-between gap-3">
+                        <span className="text-sm text-muted-foreground">
+                            Tasks created
+                        </span>
+                        <Badge variant="outline" className="rounded-full">
                             {stats.tasksCreated}
-                        </div>
+                        </Badge>
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                        Last activity {stats.lastActive.toLocaleString()}
                     </div>
                 </div>
-
-                <div className="mt-4 pt-3 border-t border-primary/20 text-xs text-primary/40">
-                    <span className="text-secondary">&gt;</span> Last activity:{" "}
-                    {stats.lastActive.toLocaleString()}
-                </div>
-            </div>
-        </div>
+            </CardContent>
+        </Card>
     );
 };

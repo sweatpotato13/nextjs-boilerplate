@@ -1,3 +1,3 @@
 export * from "./button";
 export * from "./navbar";
-export * from "./terminal-frame";
+export * from "./panel-frame";

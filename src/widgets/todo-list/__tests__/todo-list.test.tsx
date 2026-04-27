@@ -54,9 +54,9 @@ jest.mock("@features/todo-operations", () => ({
 }));
 
 describe("TodoList", () => {
-    it("should render the header", () => {
+    it("should render the overview header", () => {
         render(<TodoList />);
-        expect(screen.getByText(/NEW_TASK:/)).toBeInTheDocument();
+        expect(screen.getByText("Task overview")).toBeInTheDocument();
     });
 
     it("should render CreateTodo component", () => {
@@ -66,7 +66,7 @@ describe("TodoList", () => {
 
     it("should render tasks header", () => {
         render(<TodoList />);
-        expect(screen.getByText(/TASKS:/)).toBeInTheDocument();
+        expect(screen.getByText("Today's tasks")).toBeInTheDocument();
     });
 
     it("should render initial todos", () => {
@@ -77,7 +77,7 @@ describe("TodoList", () => {
 
     it("should display todo count", () => {
         render(<TodoList />);
-        expect(screen.getByText("(2 total)")).toBeInTheDocument();
+        expect(screen.getByText("2 total tasks")).toBeInTheDocument();
     });
 
     it("should create new todo when CreateTodo calls onCreateTodo", () => {
@@ -86,7 +86,7 @@ describe("TodoList", () => {
         fireEvent.click(screen.getByTestId("create-button"));
 
         expect(screen.getByText("New todo")).toBeInTheDocument();
-        expect(screen.getByText("(3 total)")).toBeInTheDocument();
+        expect(screen.getByText("3 total tasks")).toBeInTheDocument();
     });
 
     it("should toggle todo completed status", () => {
@@ -109,14 +109,13 @@ describe("TodoList", () => {
         fireEvent.click(deleteButton);
 
         expect(screen.queryByTestId("todo-1")).not.toBeInTheDocument();
-        expect(screen.getByText("(1 total)")).toBeInTheDocument();
+        expect(screen.getByText("1 total tasks")).toBeInTheDocument();
     });
 
     it("should display completed and pending counts", () => {
         render(<TodoList />);
-        // Initial: 1 completed (Eat lunch), 1 pending (Morning exercise)
-        expect(screen.getByText(/completed/)).toBeInTheDocument();
-        expect(screen.getByText(/pending/)).toBeInTheDocument();
+        expect(screen.getByText("1 done")).toBeInTheDocument();
+        expect(screen.getByText("1 open")).toBeInTheDocument();
     });
 
     it("should show empty state when all todos are deleted", () => {
@@ -129,15 +128,14 @@ describe("TodoList", () => {
         const todo2 = screen.getByTestId("todo-2");
         fireEvent.click(todo2.querySelectorAll("button")[1]);
 
-        expect(screen.getByText("No tasks found.")).toBeInTheDocument();
+        expect(screen.getByText("No tasks yet")).toBeInTheDocument();
         expect(
-            screen.getByText("Type a task above to get started.")
+            screen.getByText("Add your first task to get started.")
         ).toBeInTheDocument();
     });
 
     it("should display progress bar when todos exist", () => {
         render(<TodoList />);
-        // Progress is shown as percentage
         expect(screen.getByText("50%")).toBeInTheDocument();
     });
 
@@ -148,11 +146,13 @@ describe("TodoList", () => {
         const todo1 = screen.getByTestId("todo-1");
         fireEvent.click(todo1.querySelector("button")!);
 
-        // Now both should be completed (100%) or we need to check the DOM
-        // The actual percentage depends on state
+        expect(screen.getByText("100%")).toBeInTheDocument();
+        expect(screen.getByText("2 total tasks")).toBeInTheDocument();
+        expect(screen.getByText("2 done")).toBeInTheDocument();
+        expect(screen.getByText("0 open")).toBeInTheDocument();
     });
 
-    it("should not show status section when no todos", () => {
+    it("should keep summary visible when no todos", () => {
         render(<TodoList />);
 
         // Delete all todos
@@ -163,7 +163,7 @@ describe("TodoList", () => {
             screen.getByTestId("todo-2").querySelectorAll("button")[1]
         );
 
-        expect(screen.queryByText(/STATUS:/)).not.toBeInTheDocument();
+        expect(screen.getByText("0 total tasks")).toBeInTheDocument();
     });
 
     it("should render ASCII art in empty state", () => {
@@ -178,7 +178,6 @@ describe("TodoList", () => {
         );
 
         // Check for pre element (ASCII art container)
-        const preElement = document.querySelector("pre");
-        expect(preElement).toBeInTheDocument();
+        expect(screen.getByText("No tasks yet")).toBeInTheDocument();
     });
 });

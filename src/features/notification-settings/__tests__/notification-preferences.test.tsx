@@ -2,10 +2,16 @@ import { fireEvent, render, screen } from "@testing-library/react";
 
 import { NotificationPreferences } from "../ui";
 
+if (typeof globalThis.PointerEvent === "undefined") {
+    globalThis.PointerEvent = MouseEvent as typeof PointerEvent;
+}
+
 describe("NotificationPreferences", () => {
     it("should render the header", () => {
         render(<NotificationPreferences />);
-        expect(screen.getByText(/NOTIFICATION_SETTINGS:/)).toBeInTheDocument();
+        expect(
+            screen.getByText("Notification preferences")
+        ).toBeInTheDocument();
     });
 
     it("should render all notification options", () => {
@@ -17,61 +23,65 @@ describe("NotificationPreferences", () => {
         expect(screen.getByText("Marketing Emails")).toBeInTheDocument();
     });
 
-    it("should render correct number of toggle checkboxes", () => {
+    it("should render correct number of toggle switches", () => {
         render(<NotificationPreferences />);
-        const checkboxes = screen.getAllByRole("checkbox");
-        expect(checkboxes).toHaveLength(4);
+        const switches = screen.getAllByRole("switch");
+        expect(switches).toHaveLength(4);
     });
 
     it("should have correct initial toggle states", () => {
         render(<NotificationPreferences />);
-        const checkboxes = screen.getAllByRole("checkbox");
+        const switches = screen.getAllByRole("switch");
 
         // email: true, push: true, taskReminders: true, marketingEmails: false
-        expect(checkboxes[0]).toBeChecked(); // Email
-        expect(checkboxes[1]).toBeChecked(); // Push
-        expect(checkboxes[2]).toBeChecked(); // Task Reminders
-        expect(checkboxes[3]).not.toBeChecked(); // Marketing
+        expect(switches[0]).toHaveAttribute("aria-checked", "true");
+        expect(switches[1]).toHaveAttribute("aria-checked", "true");
+        expect(switches[2]).toHaveAttribute("aria-checked", "true");
+        expect(switches[3]).toHaveAttribute("aria-checked", "false");
     });
 
     it("should toggle email notifications", () => {
         render(<NotificationPreferences />);
-        const emailCheckbox = screen.getAllByRole("checkbox")[0];
+        const emailCheckbox = screen.getAllByRole("switch")[0];
 
-        expect(emailCheckbox).toBeChecked();
+        expect(emailCheckbox).toHaveAttribute("aria-checked", "true");
+
+        fireEvent.pointerDown(emailCheckbox);
+        fireEvent.click(emailCheckbox);
+        expect(emailCheckbox).toHaveAttribute("aria-checked", "false");
 
         fireEvent.click(emailCheckbox);
-        expect(emailCheckbox).not.toBeChecked();
-
-        fireEvent.click(emailCheckbox);
-        expect(emailCheckbox).toBeChecked();
+        expect(emailCheckbox).toHaveAttribute("aria-checked", "true");
     });
 
     it("should toggle push notifications", () => {
         render(<NotificationPreferences />);
-        const pushCheckbox = screen.getAllByRole("checkbox")[1];
+        const pushCheckbox = screen.getAllByRole("switch")[1];
 
-        expect(pushCheckbox).toBeChecked();
+        expect(pushCheckbox).toHaveAttribute("aria-checked", "true");
+        fireEvent.pointerDown(pushCheckbox);
         fireEvent.click(pushCheckbox);
-        expect(pushCheckbox).not.toBeChecked();
+        expect(pushCheckbox).toHaveAttribute("aria-checked", "false");
     });
 
     it("should toggle task reminders", () => {
         render(<NotificationPreferences />);
-        const taskCheckbox = screen.getAllByRole("checkbox")[2];
+        const taskCheckbox = screen.getAllByRole("switch")[2];
 
-        expect(taskCheckbox).toBeChecked();
+        expect(taskCheckbox).toHaveAttribute("aria-checked", "true");
+        fireEvent.pointerDown(taskCheckbox);
         fireEvent.click(taskCheckbox);
-        expect(taskCheckbox).not.toBeChecked();
+        expect(taskCheckbox).toHaveAttribute("aria-checked", "false");
     });
 
     it("should toggle marketing emails", () => {
         render(<NotificationPreferences />);
-        const marketingCheckbox = screen.getAllByRole("checkbox")[3];
+        const marketingCheckbox = screen.getAllByRole("switch")[3];
 
-        expect(marketingCheckbox).not.toBeChecked();
+        expect(marketingCheckbox).toHaveAttribute("aria-checked", "false");
+        fireEvent.pointerDown(marketingCheckbox);
         fireEvent.click(marketingCheckbox);
-        expect(marketingCheckbox).toBeChecked();
+        expect(marketingCheckbox).toHaveAttribute("aria-checked", "true");
     });
 
     it("should display auto-saved badge", () => {
@@ -81,15 +91,18 @@ describe("NotificationPreferences", () => {
 
     it("should maintain independent toggle states", () => {
         render(<NotificationPreferences />);
-        const checkboxes = screen.getAllByRole("checkbox");
+        const checkboxes = screen.getAllByRole("switch");
 
         // Toggle all checkboxes
-        checkboxes.forEach(checkbox => fireEvent.click(checkbox));
+        checkboxes.forEach(checkbox => {
+            fireEvent.pointerDown(checkbox);
+            fireEvent.click(checkbox);
+        });
 
         // Verify states are inverted
-        expect(checkboxes[0]).not.toBeChecked(); // Email was true, now false
-        expect(checkboxes[1]).not.toBeChecked(); // Push was true, now false
-        expect(checkboxes[2]).not.toBeChecked(); // Task was true, now false
-        expect(checkboxes[3]).toBeChecked(); // Marketing was false, now true
+        expect(checkboxes[0]).toHaveAttribute("aria-checked", "false");
+        expect(checkboxes[1]).toHaveAttribute("aria-checked", "false");
+        expect(checkboxes[2]).toHaveAttribute("aria-checked", "false");
+        expect(checkboxes[3]).toHaveAttribute("aria-checked", "true");
     });
 });

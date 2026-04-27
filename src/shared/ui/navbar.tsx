@@ -1,149 +1,185 @@
 "use client";
 
 import { useAuth } from "@entities/session";
-import { LogoutButton } from "@features/auth";
+import { cn } from "@shared/lib/utils";
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from "@shared/ui/primitives/avatar";
+import { Badge } from "@shared/ui/primitives/badge";
+import { buttonVariants } from "@shared/ui/primitives/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@shared/ui/primitives/dropdown-menu";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export const Navbar = () => {
     const pathname = usePathname();
-    const { user, isAuthenticated, isLoading } = useAuth();
-
-    const isActive = (path: string) => {
-        return pathname === path;
-    };
+    const router = useRouter();
+    const { user, isAuthenticated, isLoading, logout } = useAuth();
 
     const navItems = [
-        { path: "/", label: "HOME" },
-        { path: "/about", label: "ABOUT" },
-        { path: "/profile", label: "PROFILE" },
-        { path: "/settings", label: "SETTINGS" },
+        { path: "/", label: "Home" },
+        { path: "/about", label: "About" },
+        { path: "/profile", label: "Profile" },
+        { path: "/settings", label: "Settings" },
     ];
 
+    const isActive = (path: string) => pathname === path;
+    const initial =
+        user?.fullName?.charAt(0) || user?.username?.charAt(0) || "N";
+    const handleNavigate = (path: string) => {
+        router.push(path);
+    };
+    const handleSignOut = () => {
+        logout();
+        router.push("/");
+    };
+
     return (
-        <nav className="navbar bg-base-200 border-b border-primary/30 font-mono">
-            <div className="navbar-start">
-                <Link
-                    href="/"
-                    className="btn btn-ghost text-primary text-lg normal-case"
-                >
-                    <span className="text-secondary">&gt;</span> TERMINAL_
-                    <span className="animate-blink">|</span>
-                </Link>
-            </div>
-
-            {/* Desktop Navigation */}
-            <div className="navbar-center hidden lg:flex">
-                <ul className="menu menu-horizontal gap-1">
+        <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-xl">
+            <nav className="mx-auto flex w-full max-w-7xl items-center justify-end gap-4 px-4 py-3 md:px-6 lg:justify-between lg:px-8">
+                <div className="hidden items-center gap-2 lg:flex">
                     {navItems.map(item => (
-                        <li key={item.path}>
-                            <Link
-                                href={item.path}
-                                className={`${
-                                    isActive(item.path)
-                                        ? "text-secondary"
-                                        : "text-primary/70 hover:text-primary"
-                                }`}
-                            >
-                                [{isActive(item.path) ? "*" : " "}
-                                {item.label}]
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-
-            {/* Desktop Auth Status */}
-            <div className="navbar-end hidden lg:flex">
-                {isLoading ? (
-                    <span className="text-primary/50 text-sm">
-                        [LOADING...]
-                    </span>
-                ) : isAuthenticated && user ? (
-                    <div className="dropdown dropdown-end">
-                        <div
-                            tabIndex={0}
-                            role="button"
-                            className="btn btn-ghost text-primary normal-case"
-                        >
-                            <span className="text-success">&gt;</span>{" "}
-                            {user.username}
-                        </div>
-                        <ul
-                            tabIndex={0}
-                            className="menu menu-sm dropdown-content mt-2 z-50 p-2 border border-primary/50 bg-base-100 w-40"
-                        >
-                            <li>
-                                <LogoutButton />
-                            </li>
-                        </ul>
-                    </div>
-                ) : (
-                    <Link
-                        href="/login"
-                        className={`btn btn-ghost text-primary normal-case ${
-                            isActive("/login") ? "text-secondary" : ""
-                        }`}
-                    >
-                        [LOGIN]
-                    </Link>
-                )}
-            </div>
-
-            {/* Mobile Menu */}
-            <div className="navbar-end lg:hidden">
-                <div className="dropdown dropdown-end">
-                    <div
-                        tabIndex={0}
-                        role="button"
-                        className="btn btn-ghost text-primary"
-                    >
-                        [MENU]
-                    </div>
-                    <ul
-                        tabIndex={0}
-                        className="menu menu-sm dropdown-content mt-2 z-50 p-2 border border-primary/50 bg-base-100 w-40"
-                    >
-                        {navItems.map(item => (
-                            <li key={item.path}>
-                                <Link
-                                    href={item.path}
-                                    className={
-                                        isActive(item.path)
-                                            ? "text-secondary"
-                                            : "text-primary"
-                                    }
-                                >
-                                    {isActive(item.path) ? ">" : " "}{" "}
-                                    {item.label}
-                                </Link>
-                            </li>
-                        ))}
-                        {/* Mobile Auth */}
-                        <li className="border-t border-primary/30 mt-2 pt-2">
-                            {isAuthenticated && user ? (
-                                <>
-                                    <span className="text-success text-xs mb-1">
-                                        &gt; {user.username}
-                                    </span>
-                                    <LogoutButton />
-                                </>
-                            ) : (
-                                <Link
-                                    href="/login"
-                                    className={
-                                        isActive("/login")
-                                            ? "text-secondary"
-                                            : "text-primary"
-                                    }
-                                >
-                                    {isActive("/login") ? ">" : " "} LOGIN
-                                </Link>
+                        <Link
+                            key={item.path}
+                            href={item.path}
+                            className={cn(
+                                buttonVariants({
+                                    variant: isActive(item.path)
+                                        ? "secondary"
+                                        : "ghost",
+                                    size: "sm",
+                                }),
+                                "rounded-full px-4",
+                                isActive(item.path) && "shadow-sm"
                             )}
-                        </li>
-                    </ul>
+                        >
+                            {item.label}
+                        </Link>
+                    ))}
                 </div>
-            </div>
-        </nav>
+
+                <div className="flex items-center gap-2">
+                    {isLoading ? (
+                        <Badge
+                            variant="secondary"
+                            className="rounded-full px-3"
+                        >
+                            Syncing…
+                        </Badge>
+                    ) : isAuthenticated && user ? (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger className="flex items-center gap-3 rounded-full border border-border bg-card px-3 py-2 text-left shadow-sm transition-colors hover:bg-accent">
+                                <Avatar className="size-8">
+                                    <AvatarImage
+                                        src={user.avatarUrl || undefined}
+                                        alt={user.fullName}
+                                    />
+                                    <AvatarFallback>{initial}</AvatarFallback>
+                                </Avatar>
+                                <div className="hidden flex-col items-start sm:flex">
+                                    <span className="text-sm font-medium">
+                                        {user.fullName}
+                                    </span>
+                                    <span className="text-xs text-muted-foreground">
+                                        @{user.username}
+                                    </span>
+                                </div>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-56">
+                                <div className="px-2 py-1.5">
+                                    <p className="text-sm font-medium">
+                                        {user.fullName}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                        {user.email}
+                                    </p>
+                                </div>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                    onClick={() => handleNavigate("/profile")}
+                                >
+                                    Profile
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => handleNavigate("/settings")}
+                                >
+                                    Settings
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onClick={handleSignOut}>
+                                    Sign out
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    ) : (
+                        <Link
+                            href="/login"
+                            className={cn(
+                                buttonVariants({
+                                    variant: "default",
+                                    size: "sm",
+                                }),
+                                "rounded-full px-4"
+                            )}
+                        >
+                            Sign in
+                        </Link>
+                    )}
+
+                    <div className="lg:hidden">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger
+                                className={cn(
+                                    buttonVariants({
+                                        variant: "ghost",
+                                        size: "icon-sm",
+                                    })
+                                )}
+                                aria-label="Open navigation menu"
+                            >
+                                <span className="text-lg">☰</span>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-56">
+                                {navItems.map(item => (
+                                    <DropdownMenuItem
+                                        key={item.path}
+                                        onClick={() =>
+                                            handleNavigate(item.path)
+                                        }
+                                    >
+                                        {item.label}
+                                    </DropdownMenuItem>
+                                ))}
+                                <DropdownMenuSeparator />
+                                {!isLoading && !isAuthenticated && (
+                                    <DropdownMenuItem
+                                        onClick={() => handleNavigate("/login")}
+                                    >
+                                        Sign in
+                                    </DropdownMenuItem>
+                                )}
+                                {isAuthenticated && (
+                                    <DropdownMenuItem
+                                        onClick={() =>
+                                            handleNavigate("/profile")
+                                        }
+                                    >
+                                        Profile
+                                    </DropdownMenuItem>
+                                )}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                </div>
+            </nav>
+        </header>
     );
 };

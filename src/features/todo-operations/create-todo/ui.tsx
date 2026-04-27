@@ -1,6 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { cn } from "@shared/lib/utils";
+import { Button } from "@shared/ui/primitives/button";
+import { Input } from "@shared/ui/primitives/input";
+import { FormEvent, useState } from "react";
 
 interface CreateTodoProps {
     onCreateTodo: (text: string) => void;
@@ -10,55 +13,41 @@ export const CreateTodo = ({ onCreateTodo }: CreateTodoProps) => {
     const [text, setText] = useState("");
     const [isFocused, setIsFocused] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        if (text.trim()) {
-            onCreateTodo(text);
-            setText("");
+
+        if (!text.trim()) {
+            return;
         }
+
+        onCreateTodo(text.trim());
+        setText("");
     };
 
     return (
-        <form onSubmit={handleSubmit} className="flex items-center gap-2">
-            {/* Prompt Symbol */}
-            <span
-                className={`text-lg shrink-0 transition-colors duration-150 ${
-                    isFocused ? "text-secondary" : "text-primary/50"
-                }`}
-            >
-                &gt;
-            </span>
-
-            {/* Input Field */}
-            <div className="flex-1 relative">
-                <input
-                    type="text"
-                    value={text}
-                    onChange={e => setText(e.target.value)}
-                    onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
-                    placeholder="Enter task..."
-                    className="input input-bordered input-primary w-full bg-transparent text-primary placeholder:text-primary/40"
-                />
-                {isFocused && text === "" && (
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-primary animate-blink">
-                        _
-                    </span>
+        <form
+            onSubmit={handleSubmit}
+            className="grid gap-3 rounded-2xl border border-border/70 bg-card p-4 shadow-sm md:grid-cols-[1fr_auto] md:items-center"
+        >
+            <Input
+                value={text}
+                onChange={e => setText(e.target.value)}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+                placeholder="Add a new task"
+                className={cn(
+                    "h-11 bg-background/70",
+                    isFocused && "ring-2 ring-ring/20"
                 )}
-            </div>
+            />
 
-            {/* Submit Button */}
-            <button
+            <Button
                 type="submit"
                 disabled={!text.trim()}
-                className={`btn btn-ghost text-sm font-medium ${
-                    text.trim()
-                        ? "text-success hover:bg-success/10"
-                        : "text-primary/30 btn-disabled"
-                }`}
+                className="h-11 rounded-xl px-5"
             >
-                [ENTER]
-            </button>
+                Add task
+            </Button>
         </form>
     );
 };

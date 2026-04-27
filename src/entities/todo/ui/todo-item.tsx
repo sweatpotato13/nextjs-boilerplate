@@ -1,5 +1,11 @@
 "use client";
 
+import { cn } from "@shared/lib/utils";
+import { Badge } from "@shared/ui/primitives/badge";
+import { Button } from "@shared/ui/primitives/button";
+import { Card } from "@shared/ui/primitives/card";
+import { Checkbox } from "@shared/ui/primitives/checkbox";
+
 import { Todo } from "../model";
 
 interface TodoItemProps {
@@ -9,46 +15,62 @@ interface TodoItemProps {
 }
 
 export const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
+    const createdAtLabel = new Intl.DateTimeFormat("en", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+    }).format(todo.createdAt);
+
     return (
-        <li className="group flex items-center justify-between py-2 px-3 hover:bg-primary/5 transition-colors duration-150 animate-fade-in">
-            <div className="flex items-center gap-3 flex-1 min-w-0">
-                {/* ASCII Checkbox */}
-                <button
-                    onClick={() => onToggle(todo.id)}
-                    className={`font-mono text-sm font-bold shrink-0 cursor-pointer select-none transition-all duration-200 ${
-                        todo.completed
-                            ? "text-success"
-                            : "text-primary/60 hover:text-primary"
-                    }`}
+        <Card className="border-border/70 bg-card/90 px-4 py-4 shadow-sm transition-transform hover:-translate-y-0.5">
+            <div className="flex items-start gap-4">
+                <Checkbox
+                    checked={todo.completed}
+                    onCheckedChange={() => onToggle(todo.id)}
                     aria-label={
                         todo.completed
                             ? "Mark as incomplete"
                             : "Mark as complete"
                     }
-                >
-                    [{todo.completed ? "x" : " "}]
-                </button>
+                    className="mt-1"
+                />
 
-                {/* Task Text */}
-                <span
-                    className={`truncate transition-all duration-200 ${
-                        todo.completed
-                            ? "line-through text-primary/40"
-                            : "text-primary"
-                    }`}
+                <div className="min-w-0 flex-1">
+                    <div className="flex items-start gap-2">
+                        <p
+                            className={cn(
+                                "truncate text-sm font-medium md:text-base",
+                                todo.completed &&
+                                    "text-muted-foreground line-through"
+                            )}
+                        >
+                            {todo.text}
+                        </p>
+                        <Badge
+                            variant={todo.completed ? "secondary" : "outline"}
+                            className="rounded-full"
+                        >
+                            {todo.completed ? "Done" : "Open"}
+                        </Badge>
+                    </div>
+
+                    <p className="mt-1 text-xs text-muted-foreground">
+                        Added {createdAtLabel}
+                    </p>
+                </div>
+
+                <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={() => onDelete(todo.id)}
+                    aria-label="Delete task"
                 >
-                    {todo.text}
-                </span>
+                    ×
+                </Button>
             </div>
-
-            {/* Delete Button */}
-            <button
-                onClick={() => onDelete(todo.id)}
-                className="text-error/60 hover:text-error text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-150 shrink-0 ml-2"
-                aria-label="Delete task"
-            >
-                [DEL]
-            </button>
-        </li>
+        </Card>
     );
 };
