@@ -54,7 +54,7 @@ describe("CreateTodo", () => {
         const input = screen.getByPlaceholderText("Add a new task");
 
         fireEvent.change(input, { target: { value: "My new task" } });
-        fireEvent.submit(input.closest("form")!);
+        fireEvent.submit(input.closest("form") as HTMLFormElement);
 
         expect(mockOnCreateTodo).toHaveBeenCalledWith("My new task");
     });
@@ -64,7 +64,7 @@ describe("CreateTodo", () => {
         const input = screen.getByPlaceholderText("Add a new task");
 
         fireEvent.change(input, { target: { value: "My new task" } });
-        fireEvent.submit(input.closest("form")!);
+        fireEvent.submit(input.closest("form") as HTMLFormElement);
 
         expect(input).toHaveValue("");
     });
@@ -74,7 +74,7 @@ describe("CreateTodo", () => {
         const input = screen.getByPlaceholderText("Add a new task");
 
         fireEvent.change(input, { target: { value: "   " } });
-        fireEvent.submit(input.closest("form")!);
+        fireEvent.submit(input.closest("form") as HTMLFormElement);
 
         expect(mockOnCreateTodo).not.toHaveBeenCalled();
     });
@@ -83,7 +83,7 @@ describe("CreateTodo", () => {
         render(<CreateTodo onCreateTodo={mockOnCreateTodo} />);
         const input = screen.getByPlaceholderText("Add a new task");
 
-        fireEvent.submit(input.closest("form")!);
+        fireEvent.submit(input.closest("form") as HTMLFormElement);
 
         expect(mockOnCreateTodo).not.toHaveBeenCalled();
     });
@@ -130,7 +130,7 @@ describe("CreateTodo", () => {
         const input = screen.getByPlaceholderText("Add a new task");
 
         fireEvent.change(input, { target: { value: "  trimmed task  " } });
-        fireEvent.submit(input.closest("form")!);
+        fireEvent.submit(input.closest("form") as HTMLFormElement);
 
         expect(mockOnCreateTodo).toHaveBeenCalledWith("trimmed task");
     });

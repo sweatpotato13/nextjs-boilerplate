@@ -95,7 +95,7 @@ describe("TodoList", () => {
         // Find the toggle button for the first uncompleted todo
         const todo1 = screen.getByTestId("todo-1");
         const toggleButton = todo1.querySelector("button");
-        fireEvent.click(toggleButton!);
+        fireEvent.click(toggleButton as HTMLButtonElement);
 
         // After toggle, should still be in the list
         expect(screen.getByTestId("todo-1")).toBeInTheDocument();
@@ -144,7 +144,7 @@ describe("TodoList", () => {
 
         // Toggle the uncompleted todo
         const todo1 = screen.getByTestId("todo-1");
-        fireEvent.click(todo1.querySelector("button")!);
+        fireEvent.click(todo1.querySelector("button") as HTMLButtonElement);
 
         expect(screen.getByText("100%")).toBeInTheDocument();
         expect(screen.getByText("2 total tasks")).toBeInTheDocument();
