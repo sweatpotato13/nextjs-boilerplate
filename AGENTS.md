@@ -1,77 +1,53 @@
 # AGENTS.md
 
-Compact repo guidance for future OpenCode sessions. Prefer executable config
-over README prose when they disagree.
+## Repository Intent
+- This is a Next.js boilerplate, not a product app; keep examples generic and reusable for new projects.
+- Demo domain code such as todos, users, and settings exists to show conventions, not to become business-specific logic.
 
 ## Commands
+- Use `pnpm`; `pnpm-lock.yaml` is the lockfile and CI installs with pnpm on Node 20.x and 22.x.
+- `pnpm dev` starts Next, `pnpm build` builds, and `pnpm start` serves the built app.
+- `pnpm lint` runs ESLint with `--fix` only on `src/**/*.{ts,tsx}`; it does not lint root `app/` files.
+- `pnpm prettier` formats only `src/**/*.{ts,tsx}`; Husky pre-commit runs `pnpm prettier` then `pnpm lint`, not tests.
+- `pnpm test` runs Jest; focus a file with `pnpm test -- src/path/to/file.test.tsx` or a case with `pnpm test -- -t "case name"`.
+- `pnpm test:coverage` enforces global 90% coverage thresholds for branches, functions, lines, and statements.
+- There is no typecheck script; use `pnpm exec tsc --noEmit` when a focused TS verification is needed.
 
-- Package manager: `pnpm` (lockfile is `pnpm-lock.yaml`; no
-  `packageManager` field in `package.json`).
-- Dev/build: `pnpm dev`, `pnpm build`, `pnpm start`.
-- Format/lint are write-fixing and only target `src/**/*.{ts,tsx}`:
-  `pnpm prettier`, then `pnpm lint`.
-- Tests: `pnpm test`; single/focused test: `pnpm test -- <test-file-or-jest-pattern>`;
-  watch: `pnpm test:watch`; coverage: `pnpm test:coverage`.
-- There is no standalone `typecheck` script; use `pnpm build` for Next/TS
-  validation.
-- Husky pre-commit runs only `pnpm prettier` then `pnpm lint`; it does not run
-  tests.
-- CI (`.github/workflows/nodejs.yaml`) runs build and lint on Node 20.x/22.x;
-  no test job is configured.
+## Routing And Layers
+- Real Next.js App Router routes live in root `app/`; each route should stay a thin wrapper around an FSD page from `src/pages`.
+- Root `pages/` is an intentional stub to discourage Pages Router use; do not add route files there, and ignore stale `src/5-pages` wording in docs.
+- `src/app` holds app-level providers/styles, not Next route files; `app/layout.tsx` imports `@app/styles/globals.css`, wraps `Providers`, and renders `Navbar`.
+- FSD dependency direction is `app -> pages -> widgets -> features -> entities -> shared`; lower layers must not import higher layers.
+- Treat each slice `index.ts` as its public API; avoid importing another slice's internal files directly.
+- Path aliases are configured for `@app`, `@pages`, `@widgets`, `@features`, `@entities`, `@shared`, and `@/*`.
 
-## Architecture
+## Folder Roles
+- `src/pages`: route-level page components consumed by root `app/*/page.tsx` files.
+- `src/widgets`: composed UI blocks such as todo lists, profile sections, and settings panels.
+- `src/features`: user actions and workflows such as auth forms, todo creation, theme switching, and notification settings.
+- `src/entities`: reusable domain models/UI for demo entities such as `user`, `todo`, and `session`.
+- `src/shared`: primitives, layout UI, utilities, and cross-cutting helpers; keep it domain-neutral.
 
-- Next.js App Router lives in root `app/` and should stay as thin route
-  wrappers. Page implementations live in `src/pages/*` and are imported as
-  `@pages/<slice>`.
-- Root shell is `app/layout.tsx`: imports `@app/styles/globals.css`, wraps with
-  `Providers`, and renders `Navbar` from `@shared/ui`.
-- `src/app/providers.tsx` is a client component and currently wraps the app with
-  `AuthProvider` from `@entities/session`.
-- Root `pages/` is an intentional stub to discourage Pages Router usage; do not
-  add real routes there.
-- FSD layers are `src/shared` → `src/entities` → `src/features` → `src/widgets`
-  → `src/pages` → `src/app`. Do not import from higher layers into lower ones.
-- Slices expose public APIs through `index.ts`; avoid cross-slice imports from
-  internal files when a barrel exists.
-- Path aliases in `tsconfig.json`/Jest: `@/*`, `@shared/*`, `@entities/*`,
-  `@features/*`, `@widgets/*`, `@pages/*`, `@app/*`.
+## UI And Styling
+- UI primitives live in `src/shared/ui/primitives` and are shadcn v4/base-nova components backed by `@base-ui/react`, not Radix.
+- `components.json` aliases shadcn output to `@shared/ui/primitives` and utilities to `@shared/lib/utils`.
+- Use `cn` from `@shared/lib/utils` for class merging; it combines `clsx` with `tailwind-merge`.
+- Tailwind v4 is wired through `src/app/styles/globals.css` with CSS variables for light/dark themes, `tw-animate-css`, and `shadcn/tailwind.css`.
+- Prefer semantic tokens such as `bg-background` and `text-muted-foreground`; there is no DaisyUI setup.
+- Follow the existing 4-space, double-quote, semicolon Prettier style; ESLint also enforces sorted imports/exports.
 
-## UI and styling
+## App Behavior
+- `src/app/providers.tsx` is the client provider boundary and currently wraps `AuthProvider` from `@entities/session`.
+- Auth is demo-only localStorage state with credentials `admin` / `1234`; replace it when starting a real project instead of building product auth on top of it.
+- Protected routes such as `/profile` and `/settings` are client route wrappers using `ProtectedRoute` from `@shared/lib`.
+- `next.config.js` enables `cacheComponents` and only allows remote images from `https://i.pravatar.cc`.
 
-- This repo uses Tailwind CSS v4 plus shadcn config; there is no DaisyUI setup.
-- Global tokens/theme live in `src/app/styles/globals.css` (`@theme inline`,
-  `shadcn/tailwind.css`, `tw-animate-css`). Tailwind config is mostly content
-  globs plus a `fade-in` animation.
-- `components.json` maps shadcn aliases to FSD locations: components
-  `@shared/ui`, primitives `@shared/ui/primitives`, utils
-  `@shared/lib/utils`, hooks `@shared/lib/hooks`; icon library is
-  `lucide-react`.
-- For shadcn-style UI, prefer semantic tokens (`bg-background`,
-  `text-muted-foreground`, etc.) and `cn()` from `@shared/lib/utils` over raw
-  colors or manual class-string branching.
+## Testing Notes
+- Jest uses `next/jest`, `jsdom`, and `jest.setup.tsx` for `@testing-library/jest-dom` plus mocks for `next/navigation`, `next/image`, and `localStorage`.
+- Import `routerMocks` from `jest.setup.tsx` when tests need to assert or alter mocked Next navigation.
+- Tests live beside slices in `__tests__`; add or update tests with new boilerplate behavior so clones inherit working examples.
+- CI currently runs only `pnpm build` and `pnpm lint`, so run Jest locally when behavior changes.
 
-## Tests
-
-- Jest uses `next/jest`, `jsdom`, and `jest.setup.tsx`.
-- Global setup mocks `next/navigation`, `next/image`, and `localStorage`; import
-  `routerMocks` from `jest.setup.tsx` when tests need to assert navigation.
-- Coverage threshold is 90% globally. Coverage excludes `src/**/index.ts` and
-  `src/app/styles/**`.
-- Tests are colocated under `__tests__/*.test.tsx`.
-
-## Repo-local conventions
-
-- `.cursorrules` asks for functions under 50 lines, max 3 nesting levels, early
-  returns, tests for new functions, edge-case tests, and mocked external deps.
-- ESLint enforces sorted imports/exports via `simple-import-sort` and semicolons;
-  several `@typescript-eslint/no-unsafe-*` rules and `no-explicit-any` are off,
-  so do not assume lint will catch unsafe typing.
-- `.cursorrules` also requests `coderabbit --prompt-only -t uncommitted` before
-  finalizing, max twice per feature, when that CLI is available.
-
-## Known doc drift
-
-- README still references legacy FSD names like `5-pages`; actual directories are
-  `src/pages`, `src/widgets`, etc.
-- `pages/README.md` line 18 also mentions `src/5-pages`; treat that as stale.
+## Repo-Local Instructions
+- `.cursorrules` asks for short, shallow functions, early returns, tests for new functions, edge-case tests, and mocked external dependencies.
+- `.cursorrules` also asks for `coderabbit --prompt-only -t uncommitted` before finalizing when that CLI is available.
