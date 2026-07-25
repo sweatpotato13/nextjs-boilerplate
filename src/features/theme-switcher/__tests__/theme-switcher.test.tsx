@@ -15,7 +15,7 @@ describe("ThemeSwitcher", () => {
             addListener: jest.fn(),
             removeListener: jest.fn(),
             dispatchEvent: jest.fn(),
-        })) as unknown as typeof window.matchMedia;
+        }));
     });
 
     it("should render the header", () => {

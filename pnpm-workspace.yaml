@@ -2,3 +2,12 @@ allowBuilds:
   msw: false
   sharp: false
   unrs-resolver: false
+
+minimumReleaseAgeExclude:
+  - postcss@8.5.23
+
+overrides:
+  postcss: 8.5.23
+  babel-plugin-istanbul: ^8.0.0
+  glob: ^13.0.6
+  jsdom: ^29.1.1
