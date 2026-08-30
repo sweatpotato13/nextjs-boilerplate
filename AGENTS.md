@@ -5,12 +5,13 @@
 - Demo domain code such as todos, users, and settings exists to show conventions, not to become business-specific logic.
 
 ## Commands
-- Use `pnpm`; `pnpm-lock.yaml` is the lockfile and CI installs with pnpm on Node 20.x and 22.x.
+- Use `pnpm`; `pnpm-lock.yaml` is the lockfile and CI installs `pnpm@latest` on Node 22.x, 24.x, and 26.x.
 - `pnpm dev` starts Next, `pnpm build` builds, and `pnpm start` serves the built app.
-- `pnpm lint` runs ESLint with `--fix` only on `src/**/*.{ts,tsx}`; it does not lint root `app/` files.
+- `pnpm lint` checks `app` and `src` without modifying files; use `pnpm lint:fix` to apply fixes.
 - `pnpm prettier` formats only `src/**/*.{ts,tsx}`; Husky pre-commit runs `pnpm prettier` then `pnpm lint`, not tests.
 - `pnpm test` runs Jest; focus a file with `pnpm test -- src/path/to/file.test.tsx` or a case with `pnpm test -- -t "case name"`.
 - `pnpm test:coverage` enforces global 90% coverage thresholds for branches, functions, lines, and statements.
+- Coverage excludes generated shadcn primitives in `src/shared/ui/primitives`; test their composed boilerplate behavior instead.
 - There is no typecheck script; use `pnpm exec tsc --noEmit` when a focused TS verification is needed.
 
 ## Routing And Layers
@@ -46,7 +47,7 @@
 - Jest uses `next/jest`, `jsdom`, and `jest.setup.tsx` for `@testing-library/jest-dom` plus mocks for `next/navigation`, `next/image`, and `localStorage`.
 - Import `routerMocks` from `jest.setup.tsx` when tests need to assert or alter mocked Next navigation.
 - Tests live beside slices in `__tests__`; add or update tests with new boilerplate behavior so clones inherit working examples.
-- CI currently runs only `pnpm build` and `pnpm lint`, so run Jest locally when behavior changes.
+- CI builds on Node 22.x, 24.x, and 26.x, then runs lint, coverage, and dependency audit on Node 26.x.
 
 ## Repo-Local Instructions
 - `.cursorrules` asks for short, shallow functions, early returns, tests for new functions, edge-case tests, and mocked external dependencies.

@@ -1,11 +1,10 @@
 import "@app/styles/globals.css";
 
 import { Providers } from "@app/providers";
+import { cn } from "@shared/lib/utils";
 import { Navbar } from "@shared/ui";
 import { Geist } from "next/font/google";
 import { ReactNode } from "react";
-
-import { cn } from "@shared/lib/utils";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 

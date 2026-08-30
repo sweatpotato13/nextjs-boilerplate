@@ -1,7 +1,6 @@
-# .github/workflows/nodejs.yml
 name: Node CI
 
-on: [push, pull_request] # Run on Push and Pull Requests
+on: [push, pull_request]
 
 jobs:
   build:
@@ -10,31 +9,25 @@ jobs:
       matrix:
         node-version: [22.x, 24.x, 26.x]
     steps:
-    - uses: actions/checkout@v7
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v6
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm install -g pnpm
-    - name: pnpm build
-      working-directory: .
-      run: |
-        pnpm install
-        pnpm build
-  lint:
+      - uses: actions/checkout@v7
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install -g pnpm@latest
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+
+  quality:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [22.x, 24.x, 26.x]
     steps:
-    - uses: actions/checkout@v7
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v6
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm install -g pnpm
-    - name: pnpm build
-      working-directory: .
-      run: |
-        pnpm install
-        pnpm lint
+      - uses: actions/checkout@v7
+      - name: Use Node.js 26.x
+        uses: actions/setup-node@v6
+        with:
+          node-version: 26.x
+      - run: npm install -g pnpm@latest
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm test:coverage --runInBand
+      - run: pnpm audit

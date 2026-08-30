@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 
 import { routerMocks } from "../../../../jest.setup";
 import { Navbar } from "../navbar";
@@ -6,6 +6,10 @@ import { Navbar } from "../navbar";
 // Mock the useAuth hook
 const mockLogout = jest.fn();
 const mockUseAuth = jest.fn();
+
+if (typeof globalThis.PointerEvent === "undefined") {
+    globalThis.PointerEvent = MouseEvent as typeof PointerEvent;
+}
 
 jest.mock("@entities/session", () => ({
     useAuth: () => mockUseAuth(),
@@ -113,6 +117,16 @@ describe("Navbar", () => {
                 screen.queryByRole("link", { name: "Sign in" })
             ).not.toBeInTheDocument();
         });
+
+        it("should sign out and return home", () => {
+            render(<Navbar />);
+
+            fireEvent.click(screen.getByRole("button", { name: /Test User/ }));
+            fireEvent.click(screen.getByRole("menuitem", { name: "Sign out" }));
+
+            expect(mockLogout).toHaveBeenCalledTimes(1);
+            expect(routerMocks.push).toHaveBeenCalledWith("/");
+        });
     });
 
     describe("when loading", () => {
@@ -153,6 +167,15 @@ describe("Navbar", () => {
             expect(
                 screen.getByLabelText("Open navigation menu")
             ).toBeInTheDocument();
+        });
+
+        it("should navigate from the mobile menu", () => {
+            render(<Navbar />);
+
+            fireEvent.click(screen.getByLabelText("Open navigation menu"));
+            fireEvent.click(screen.getByRole("menuitem", { name: "Sign in" }));
+
+            expect(routerMocks.push).toHaveBeenCalledWith("/login");
         });
     });
 

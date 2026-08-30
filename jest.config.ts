@@ -26,6 +26,7 @@ const config: Config = {
         "!src/**/*.d.ts",
         "!src/**/index.ts",
         "!src/app/styles/**",
+        "!src/shared/ui/primitives/**",
     ],
     coverageThreshold: {
         global: {
