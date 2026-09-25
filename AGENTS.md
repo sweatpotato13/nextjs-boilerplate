@@ -41,7 +41,7 @@
 - `src/app/providers.tsx` is the client provider boundary and currently wraps `AuthProvider` from `@entities/session`.
 - Auth is demo-only localStorage state with credentials `admin` / `1234`; replace it when starting a real project instead of building product auth on top of it.
 - Protected routes such as `/profile` and `/settings` are client route wrappers using `ProtectedRoute` from `@shared/lib`.
-- `next.config.js` enables `cacheComponents` and only allows remote images from `https://i.pravatar.cc`.
+- `next.config.mjs` enables `cacheComponents` and only allows remote images from `https://i.pravatar.cc`.
 
 ## Testing Notes
 - Jest uses `next/jest`, `jsdom`, and `jest.setup.tsx` for `@testing-library/jest-dom` plus mocks for `next/navigation`, `next/image`, and `localStorage`.

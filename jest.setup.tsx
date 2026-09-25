@@ -45,11 +45,20 @@ beforeEach(() => {
 });
 
 // Mock Next.js Image component
+type NextImageMockProps = React.ImgHTMLAttributes<HTMLImageElement> & {
+    fill?: boolean;
+    priority?: boolean;
+    unoptimized?: boolean;
+};
+
 jest.mock("next/image", () => ({
     __esModule: true,
-    default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => {
+    default: (props: NextImageMockProps) => {
+        // Drop Next-only props so React does not warn about unknown DOM attributes
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { fill, priority, unoptimized, ...imgProps } = props;
         // eslint-disable-next-line @next/next/no-img-element
-        return <img {...props} alt={props.alt || ""} />;
+        return <img {...imgProps} alt={imgProps.alt || ""} />;
     },
 }));
 
