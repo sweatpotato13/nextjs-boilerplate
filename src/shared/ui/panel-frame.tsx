@@ -7,26 +7,32 @@ import {
     CardHeader,
     CardTitle,
 } from "@shared/ui/primitives/card";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useSyncExternalStore } from "react";
 
 interface PanelFrameProps {
     title: string;
     children: ReactNode;
 }
 
-export const PanelFrame = ({ title, children }: PanelFrameProps) => {
-    const [currentDate, setCurrentDate] = useState<string>("");
+const subscribeToNothing = () => () => {};
 
-    useEffect(() => {
-        setCurrentDate(
-            new Date().toLocaleDateString("en-US", {
-                weekday: "short",
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-            })
-        );
-    }, []);
+const formatToday = () =>
+    new Date().toLocaleDateString("en-US", {
+        weekday: "short",
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+    });
+
+// Render an empty date on the server so hydration never mismatches
+const getServerDate = () => "";
+
+export const PanelFrame = ({ title, children }: PanelFrameProps) => {
+    const currentDate = useSyncExternalStore(
+        subscribeToNothing,
+        formatToday,
+        getServerDate
+    );
 
     return (
         <Card
