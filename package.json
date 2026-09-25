@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "oxlint app src",
     "lint:fix": "pnpm lint --fix",
-    "prettier": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "prettier": "prettier --write \"{app,src}/**/*.{ts,tsx}\"",
     "prepare": "husky",
     "test": "jest",
     "test:watch": "jest --watch",
