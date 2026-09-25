@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/unbound-method */
+/* oxlint-disable typescript/unbound-method */
 import { render, screen, waitFor } from "@testing-library/react";
 import { useRouter } from "next/navigation";
 

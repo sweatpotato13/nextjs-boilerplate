@@ -44,3 +44,6 @@ __snapshots__
 .idea
 node_modules
 coverage
+
+# next.js generated types
+next-env.d.ts

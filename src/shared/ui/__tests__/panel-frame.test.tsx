@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import { renderToString } from "react-dom/server";
 
 import { PanelFrame } from "../panel-frame";
 
@@ -39,6 +40,23 @@ describe("PanelFrame", () => {
         expect(
             await screen.findByText(/Mon, Jan 15, 2024/)
         ).toBeInTheDocument();
+    });
+
+    it("should omit the date in server markup to avoid hydration mismatch", () => {
+        const html = renderToString(
+            <PanelFrame title="Server">Content</PanelFrame>
+        );
+
+        expect(html).toContain("Server");
+        expect(html).not.toContain("Jan 15, 2024");
+    });
+
+    it("should unmount cleanly", () => {
+        const { unmount } = render(
+            <PanelFrame title="Unmount">Content</PanelFrame>
+        );
+
+        expect(() => unmount()).not.toThrow();
     });
 
     it("should have a card-like structure with content", () => {

@@ -56,7 +56,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "tailwind.config.js",
-    "eslint.config.mjs",
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
