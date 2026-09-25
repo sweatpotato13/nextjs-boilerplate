@@ -14,7 +14,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install -g pnpm@latest
+      - uses: pnpm/action-setup@v6
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
 
@@ -26,7 +26,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 26.x
-      - run: npm install -g pnpm@latest
+      - uses: pnpm/action-setup@v6
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm test:coverage --runInBand

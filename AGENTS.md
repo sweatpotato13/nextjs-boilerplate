@@ -5,7 +5,7 @@
 - Demo domain code such as todos, users, and settings exists to show conventions, not to become business-specific logic.
 
 ## Commands
-- Use `pnpm`; `pnpm-lock.yaml` is the lockfile and CI installs `pnpm@latest` on Node 22.x, 24.x, and 26.x.
+- Use `pnpm`; `pnpm-lock.yaml` is the lockfile and CI installs the pnpm version pinned in `package.json` `packageManager` via `pnpm/action-setup` on Node 22.x, 24.x, and 26.x.
 - `pnpm dev` starts Next, `pnpm build` builds, and `pnpm start` serves the built app.
 - `pnpm lint` checks `app` and `src` without modifying files; use `pnpm lint:fix` to apply fixes.
 - `pnpm prettier` formats only `src/**/*.{ts,tsx}`; Husky pre-commit runs `pnpm prettier` then `pnpm lint`, not tests.
