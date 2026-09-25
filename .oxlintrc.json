@@ -1,0 +1,121 @@
+{
+    "$schema": "./node_modules/oxlint/configuration_schema.json",
+    "plugins": [
+        "eslint",
+        "typescript",
+        "import",
+        "react",
+        "jsx-a11y",
+        "nextjs",
+        "oxc",
+        "unicorn"
+    ],
+    "jsPlugins": [
+        "eslint-plugin-simple-import-sort",
+        "eslint-plugin-security"
+    ],
+    "categories": {
+        "correctness": "error"
+    },
+    "env": {
+        "browser": true,
+        "node": true,
+        "es2022": true
+    },
+    "ignorePatterns": [
+        "**/types.d.ts",
+        "**/*.js",
+        "**/node_modules/**"
+    ],
+    "options": {
+        "typeAware": true
+    },
+    "rules": {
+        "no-empty-pattern": "off",
+        "no-case-declarations": "error",
+        "no-empty": "error",
+        "no-fallthrough": "error",
+        "no-prototype-builtins": "error",
+        "no-regex-spaces": "error",
+        "no-var": "error",
+        "prefer-const": "error",
+        "prefer-rest-params": "error",
+        "prefer-spread": "error",
+        "no-array-constructor": "error",
+        "typescript/await-thenable": "error",
+        "typescript/ban-ts-comment": "error",
+        "typescript/no-array-delete": "error",
+        "typescript/no-base-to-string": "error",
+        "typescript/no-duplicate-enum-values": "error",
+        "typescript/no-duplicate-type-constituents": "error",
+        "typescript/no-empty-object-type": "error",
+        "typescript/no-extra-non-null-assertion": "error",
+        "typescript/no-floating-promises": "error",
+        "typescript/no-for-in-array": "error",
+        "typescript/no-implied-eval": "error",
+        "typescript/no-misused-new": "error",
+        "typescript/no-misused-promises": "error",
+        "typescript/no-namespace": "error",
+        "typescript/no-non-null-asserted-optional-chain": "error",
+        "typescript/no-redundant-type-constituents": "error",
+        "typescript/no-require-imports": "error",
+        "typescript/no-this-alias": "error",
+        "typescript/no-unnecessary-type-assertion": "error",
+        "typescript/no-unnecessary-type-constraint": "error",
+        "typescript/no-unsafe-declaration-merging": "error",
+        "typescript/no-unsafe-enum-comparison": "error",
+        "typescript/no-unsafe-function-type": "error",
+        "typescript/no-unsafe-unary-minus": "error",
+        "typescript/no-wrapper-object-types": "error",
+        "typescript/only-throw-error": "error",
+        "typescript/prefer-as-const": "error",
+        "typescript/prefer-namespace-keyword": "error",
+        "typescript/prefer-promise-reject-errors": "error",
+        "typescript/require-await": "error",
+        "typescript/restrict-plus-operands": "error",
+        "typescript/restrict-template-expressions": "error",
+        "typescript/triple-slash-reference": "error",
+        "typescript/unbound-method": "error",
+        "no-unused-vars": "error",
+        "no-unused-expressions": "error",
+        "typescript/no-explicit-any": "off",
+        "typescript/no-unsafe-argument": "off",
+        "typescript/no-unsafe-assignment": "off",
+        "typescript/no-unsafe-call": "off",
+        "typescript/no-unsafe-member-access": "off",
+        "typescript/no-unsafe-return": "off",
+        "simple-import-sort/imports": "error",
+        "simple-import-sort/exports": "error",
+        "security/detect-bidi-characters": "warn",
+        "security/detect-buffer-noassert": "warn",
+        "security/detect-child-process": "warn",
+        "security/detect-disable-mustache-escape": "warn",
+        "security/detect-eval-with-expression": "warn",
+        "security/detect-new-buffer": "warn",
+        "security/detect-no-csrf-before-method-override": "warn",
+        "security/detect-non-literal-fs-filename": "warn",
+        "security/detect-non-literal-regexp": "warn",
+        "security/detect-non-literal-require": "warn",
+        "security/detect-object-injection": "off",
+        "security/detect-possible-timing-attacks": "warn",
+        "security/detect-pseudoRandomBytes": "warn",
+        "security/detect-unsafe-regex": "warn",
+        "jsx-a11y/label-has-associated-control": [
+            "error",
+            {
+                "depth": 3
+            }
+        ]
+    },
+    "overrides": [
+        {
+            "files": [
+                "src/shared/ui/primitives/**"
+            ],
+            "rules": {
+                "jsx-a11y/label-has-associated-control": "off",
+                "jsx-a11y/prefer-tag-over-role": "off"
+            }
+        }
+    ]
+}

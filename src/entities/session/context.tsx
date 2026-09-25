@@ -40,7 +40,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Load user from localStorage on mount
+    // Load user from localStorage on mount. Reading storage in an effect keeps
+    // the server render and first client render identical (no hydration mismatch).
+    /* oxlint-disable react/set-state-in-effect */
     useEffect(() => {
         try {
             const stored = localStorage.getItem(STORAGE_KEY);
@@ -56,6 +58,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             setIsLoading(false);
         }
     }, []);
+    /* oxlint-enable react/set-state-in-effect */
 
     const login = useCallback((id: string, password: string): boolean => {
         if (

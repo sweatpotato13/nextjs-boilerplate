@@ -55,9 +55,9 @@ jest.mock("next/image", () => ({
     __esModule: true,
     default: (props: NextImageMockProps) => {
         // Drop Next-only props so React does not warn about unknown DOM attributes
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // oxlint-disable-next-line no-unused-vars
         const { fill, priority, unoptimized, ...imgProps } = props;
-        // eslint-disable-next-line @next/next/no-img-element
+        // oxlint-disable-next-line nextjs/no-img-element
         return <img {...imgProps} alt={imgProps.alt || ""} />;
     },
 }));

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/unbound-method */
+/* oxlint-disable typescript/unbound-method */
 import { fireEvent, render, screen } from "@testing-library/react";
 import { useRouter } from "next/navigation";
 
