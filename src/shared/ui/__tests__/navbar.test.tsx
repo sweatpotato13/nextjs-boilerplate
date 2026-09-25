@@ -127,6 +127,33 @@ describe("Navbar", () => {
             expect(mockLogout).toHaveBeenCalledTimes(1);
             expect(routerMocks.push).toHaveBeenCalledWith("/");
         });
+
+        it.each([
+            ["Profile", "/profile"],
+            ["Settings", "/settings"],
+        ])("should navigate to %s from the account menu", (label, path) => {
+            render(<Navbar />);
+
+            fireEvent.click(screen.getByRole("button", { name: /Test User/ }));
+            fireEvent.click(screen.getByRole("menuitem", { name: label }));
+
+            expect(routerMocks.push).toHaveBeenCalledWith(path);
+        });
+
+        it("should navigate to profile from the mobile menu", () => {
+            render(<Navbar />);
+
+            fireEvent.click(screen.getByLabelText("Open navigation menu"));
+            const profileItems = screen.getAllByRole("menuitem", {
+                name: "Profile",
+            });
+            fireEvent.click(profileItems[profileItems.length - 1]);
+
+            expect(
+                screen.queryByRole("menuitem", { name: "Sign in" })
+            ).not.toBeInTheDocument();
+            expect(routerMocks.push).toHaveBeenCalledWith("/profile");
+        });
     });
 
     describe("when loading", () => {
@@ -176,6 +203,15 @@ describe("Navbar", () => {
             fireEvent.click(screen.getByRole("menuitem", { name: "Sign in" }));
 
             expect(routerMocks.push).toHaveBeenCalledWith("/login");
+        });
+
+        it("should navigate to a nav item from the mobile menu", () => {
+            render(<Navbar />);
+
+            fireEvent.click(screen.getByLabelText("Open navigation menu"));
+            fireEvent.click(screen.getByRole("menuitem", { name: "About" }));
+
+            expect(routerMocks.push).toHaveBeenCalledWith("/about");
         });
     });
 

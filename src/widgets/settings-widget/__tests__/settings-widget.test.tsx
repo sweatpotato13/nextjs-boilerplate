@@ -49,6 +49,18 @@ describe("SettingsWidget", () => {
         expect(screen.getByRole("combobox")).toBeInTheDocument();
     });
 
+    it("should change the selected language", () => {
+        render(<SettingsWidget />);
+
+        fireEvent.click(screen.getByRole("combobox"));
+        const option = screen.getByRole("option", { name: "Korean" });
+        // Base UI only commits mouse clicks that start with a pointerdown
+        fireEvent.pointerDown(option, { pointerType: "mouse" });
+        fireEvent.click(option);
+
+        expect(screen.getByRole("combobox")).toHaveTextContent("ko");
+    });
+
     it("should switch to notifications tab when clicked", () => {
         render(<SettingsWidget />);
 
