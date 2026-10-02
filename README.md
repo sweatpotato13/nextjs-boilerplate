@@ -63,15 +63,41 @@
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+### Prerequisites
+
+- Node.js 24.x or 26.x. `.nvmrc` selects Node 24.
+- pnpm 11.15.1, pinned in `package.json`.
+
+Jest uses Node's built-in TypeScript support to load its configuration.
 
 ### Installation
 
 1. Clone the repo
    ```sh
    git clone https://github.com/sweatpotato13/nextjs-boilerplate.git
+   cd nextjs-boilerplate
+   nvm install
+   nvm use
+   pnpm install --frozen-lockfile
+   pnpm dev
    ```
+
+   If you use another Node version manager, select a supported version instead
+   of running the `nvm` commands.
+
+### Validation
+
+```sh
+pnpm lint
+pnpm typecheck
+pnpm test:coverage --runInBand
+pnpm build
+pnpm audit
+```
+
+`pnpm typecheck` generates Next.js types before running TypeScript, so it also
+works on a fresh checkout without a prior build. CI runs quality checks on
+Node 24.x and 26.x and builds on both versions.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

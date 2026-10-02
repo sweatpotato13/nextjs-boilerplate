@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [22.x, 24.x, 26.x]
+        node-version: [24.x, 26.x]
     steps:
       - uses: actions/checkout@v7
       - name: Use Node.js ${{ matrix.node-version }}
@@ -20,14 +20,18 @@ jobs:
 
   quality:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [24.x, 26.x]
     steps:
       - uses: actions/checkout@v7
-      - name: Use Node.js 26.x
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
-          node-version: 26.x
+          node-version: ${{ matrix.node-version }}
       - uses: pnpm/action-setup@v6
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
+      - run: pnpm typecheck
       - run: pnpm test:coverage --runInBand
       - run: pnpm audit
