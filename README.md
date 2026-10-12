@@ -66,6 +66,7 @@
 ### Prerequisites
 
 - Node.js 24.x or 26.x. `.nvmrc` selects Node 24.
+- Node.js 22 and other major versions are not supported.
 - pnpm 11.15.1, pinned in `package.json`.
 
 Jest uses Node's built-in TypeScript support to load its configuration.
@@ -98,6 +99,13 @@ pnpm audit
 `pnpm typecheck` generates Next.js types before running TypeScript, so it also
 works on a fresh checkout without a prior build. CI runs quality checks on
 Node 24.x and 26.x and builds on both versions.
+
+As of October 12, 2026, `pnpm audit` still reports two development-tool
+advisories with no published fixed npm version:
+[braces](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) (via shadcn) and
+[sprintf-js](https://github.com/advisories/GHSA-hp3w-g68c-fv3c) (via Jest).
+The full audit remains a required CI check; update the affected dependencies
+and remove this note when fixes become available.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
