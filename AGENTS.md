@@ -55,7 +55,7 @@
 - Jest uses `next/jest`, `jsdom`, and `jest.setup.tsx` for `@testing-library/jest-dom` plus mocks for `next/navigation`, `next/image`, and `localStorage`.
 - Import `routerMocks` from `jest.setup.tsx` when tests need to assert or alter mocked Next navigation.
 - Tests live beside slices in `__tests__`; add or update tests with new boilerplate behavior so clones inherit working examples.
-- CI builds and runs lint, typecheck, coverage, and dependency audit on Node 24.x and 26.x.
+- CI builds and runs lint, typecheck, and coverage on Node 24.x and 26.x. Dependency audit is temporarily disabled until a braces fix is available.
 
 ## Repo-Local Instructions
 - `.cursorrules` asks for short, shallow functions, early returns, tests for new functions, edge-case tests, and mocked external dependencies.
