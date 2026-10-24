@@ -1,38 +1,36 @@
 name: Node CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
-        node-version: [24.x, 26.x]
+        node-version: ['^22.23.4', '^24.22.1', '^26.12.1']
     steps:
       - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
-      - uses: pnpm/action-setup@v6
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build
-
-  quality:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: [24.x, 26.x]
-    steps:
-      - uses: actions/checkout@v7
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ matrix.node-version }}
-      - uses: pnpm/action-setup@v6
+          check-latest: true
+          cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test:coverage --runInBand
+      - run: pnpm build

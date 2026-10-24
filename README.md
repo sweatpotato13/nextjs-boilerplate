@@ -65,8 +65,8 @@
 
 ### Prerequisites
 
-- Node.js 24.x or 26.x. `.nvmrc` selects Node 24.
-- Node.js 22 and other major versions are not supported.
+- Node.js `^22.23.4`, `^24.22.1`, or `^26.12.1`. These floors include the [October 2026 security releases](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases).
+- `.nvmrc` pins Node 26.12.1 for local development.
 - pnpm 11.15.1, pinned in `package.json`.
 
 Jest uses Node's built-in TypeScript support to load its configuration.
@@ -97,8 +97,10 @@ pnpm audit
 ```
 
 `pnpm typecheck` generates Next.js types before running TypeScript, so it also
-works on a fresh checkout without a prior build. CI runs quality checks on
-Node 24.x and 26.x and builds on both versions.
+works on a fresh checkout without a prior build. CI runs lint, typecheck,
+coverage, and build on each supported Node line for pull requests and pushes
+to `main`. CI selects the latest release within each supported range, caches
+the pnpm store, and cancels superseded runs for the same pull request or branch.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

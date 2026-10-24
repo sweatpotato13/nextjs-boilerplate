@@ -5,7 +5,7 @@
 - Demo domain code such as todos, users, and settings exists to show conventions, not to become business-specific logic.
 
 ## Commands
-- Use `pnpm`; `pnpm-lock.yaml` is the lockfile and CI installs the pnpm version pinned in `package.json` `packageManager` via `pnpm/action-setup` on Node 24.x and 26.x.
+- Use `pnpm`; `pnpm-lock.yaml` is the lockfile and CI installs the pnpm version pinned in `package.json` `packageManager` via `pnpm/action-setup` on supported Node 22.x, 24.x, and 26.x releases.
 - `pnpm dev` starts Next, `pnpm build` builds, and `pnpm start` serves the built app.
 - `pnpm lint` runs oxlint on `app` and `src` without modifying files; use `pnpm lint:fix` to apply fixes. Config lives in `.oxlintrc.json`.
 - oxlint runs type-aware rules through `oxlint-tsgolint` and ESLint plugins (`simple-import-sort`, `security`) through `jsPlugins`; there is no ESLint setup.
@@ -16,7 +16,7 @@
 - `pnpm test:coverage` enforces global 90% coverage thresholds for branches, functions, lines, and statements.
 - Coverage excludes generated shadcn primitives in `src/shared/ui/primitives`; test their composed boilerplate behavior instead.
 - `pnpm typecheck` generates Next.js types before running `tsc --noEmit`, including on a fresh checkout.
-- Supported Node versions are 24.x and 26.x; `.nvmrc` selects Node 24.
+- Supported Node versions are `^22.23.4`, `^24.22.1`, and `^26.12.1`; `.nvmrc` pins Node 26.12.1.
 - TypeScript is 7.x (native compiler, no JS API). `next build` type-checks through the project `tsc` CLI (`experimental.useTypeScriptCli`, on by default); do not set it to `false`.
 - Jest loads `jest.config.ts` with Node's built-in type stripping; there is no ts-node.
 - Editors: VS Code's "Use Workspace Version" and the Next.js TS plugin do not work with TS 7; use the built-in TS or the TS 7 native editor extension.
@@ -55,7 +55,7 @@
 - Jest uses `next/jest`, `jsdom`, and `jest.setup.tsx` for `@testing-library/jest-dom` plus mocks for `next/navigation`, `next/image`, and `localStorage`.
 - Import `routerMocks` from `jest.setup.tsx` when tests need to assert or alter mocked Next navigation.
 - Tests live beside slices in `__tests__`; add or update tests with new boilerplate behavior so clones inherit working examples.
-- CI builds and runs lint, typecheck, and coverage on Node 24.x and 26.x. Dependency audit is temporarily disabled until a braces fix is available.
+- CI runs lint, typecheck, coverage, and build on each supported Node line for pull requests and pushes to `main`. Dependency audit is temporarily disabled until a braces fix is available.
 
 ## Repo-Local Instructions
 - `.cursorrules` asks for short, shallow functions, early returns, tests for new functions, edge-case tests, and mocked external dependencies.
